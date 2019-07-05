@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            app:startDestination="@+id/trips_dest">
+    <fragment
+            android:id="@+id/trips_dest"
+            android:name="com.peranidze.travel.trips.TripsFragment"
+            android:label="@string/title_trips"
+            tools:layout="@layout/fragment_trips">
+        <action
+                android:id="@+id/action_trips_dest_to_trip"
+                app:destination="@id/trip_dest"/>
+    </fragment>
+    <fragment
+            android:id="@+id/users_dest"
+            android:name="com.peranidze.travel.users.UsersFragment"
+            android:label="@string/title_users"
+            tools:layout="@layout/fragment_users">
+        <action
+                android:id="@+id/action_users_dest_to_user"
+                app:destination="@id/user_dest"/>
+    </fragment>
+    <fragment
+            android:id="@+id/trip_dest"
+            android:name="com.peranidze.travel.trip.TripFragment"
+            android:label="@string/title_trip">
+        <action
+                android:id="@+id/action_trip_dest_to_user_dest"
+                app:destination="@id/user_dest"/>
+    </fragment>
+    <fragment
+            android:id="@+id/user_dest"
+            android:name="com.peranidze.travel.user.UserFragment"
+            android:label="@string/title_user"/>
+</navigation>

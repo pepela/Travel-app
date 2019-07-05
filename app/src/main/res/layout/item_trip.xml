@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/trip_from_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/recycler_view_item_vertical_margin"
+            android:layout_marginStart="@dimen/recycler_view_item_horizontal_margin"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Point A"/>
+
+    <TextView
+            android:id="@+id/trip_date_start_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_marginTop="@dimen/recycler_view_item_vertical_margin"
+            android:layout_marginBottom="@dimen/recycler_view_item_vertical_margin"
+            android:layout_marginEnd="@dimen/recycler_view_item_horizontal_margin"
+            android:layout_marginStart="@dimen/recycler_view_item_horizontal_margin"
+            app:layout_constraintEnd_toStartOf="@+id/trip_date_end_tv"
+            app:layout_constraintTop_toBottomOf="@+id/trip_from_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="23.08.2024"/>
+
+    <TextView
+            android:id="@+id/trip_date_end_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_marginTop="@dimen/recycler_view_item_vertical_margin"
+            android:layout_marginBottom="@dimen/recycler_view_item_vertical_margin"
+            android:layout_marginEnd="@dimen/recycler_view_item_horizontal_margin"
+            android:layout_marginStart="@dimen/recycler_view_item_horizontal_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trip_from_tv"
+            app:layout_constraintStart_toEndOf="@+id/trip_date_start_tv"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="23.08.2024"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
