@@ -7,6 +7,7 @@ import android.view.View
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseActivity
+import com.peranidze.travel.main.MainActivity
 import com.peranidze.travel.signin.login.LoginFragment
 import com.peranidze.travel.signin.signup.SignUpFragment
 import kotlinx.android.synthetic.main.activity_sign_in.*
@@ -42,7 +43,8 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
     }
 
     override fun onLoggedIn(user: User) {
-        TODO("not implemented")
+        startMain()
+        finish()
     }
 
     override fun onCreateAccountClicked() {
@@ -57,7 +59,7 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
     }
 
     override fun onSignedUp(user: User) {
-        TODO("not implemented")
+        startMain()
     }
 
     override fun showSignUpLoading(show: Boolean) {
@@ -73,6 +75,10 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
 
     private fun hideLoading() {
         sign_in_progress.visibility = View.GONE
+    }
+
+    private fun startMain() {
+        startActivity(MainActivity.getIntent(this))
     }
 
 }

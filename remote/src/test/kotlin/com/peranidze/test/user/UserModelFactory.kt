@@ -10,7 +10,7 @@ class UserModelFactory {
 
     companion object Factory {
 
-        fun makeUserModel() = UserModel(randomLong(), randomUuid(), makeRoleModel())
+        fun makeUserModel() = UserModel(randomLong(), randomUuid(), makeRoleModel(), randomUuid())
 
         fun makeUserModels(count: Int = randomInt()): List<UserModel> = List(count) { makeUserModel() }
     }

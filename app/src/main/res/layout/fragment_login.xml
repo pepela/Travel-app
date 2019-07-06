@@ -17,7 +17,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-                android:id="@+id/login_email_tv"
+                android:id="@+id/login_email_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_email"
@@ -36,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
-                android:id="@+id/login_password_tv"
+                android:id="@+id/login_password_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_password"

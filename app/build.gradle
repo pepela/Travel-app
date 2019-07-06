@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -48,8 +49,12 @@ dependencies {
     implementation appDependencies.navigation
     implementation appDependencies.navigationUi
 
-
     testImplementation appTestDependencies.junit
+    testImplementation appTestDependencies.koin
+
+    androidTestImplementation appTestDependencies.koin
     androidTestImplementation appTestDependencies.androidRunner
     androidTestImplementation appTestDependencies.espressoCore
+    androidTestImplementation appTestDependencies.androidJunit
+    androidTestImplementation appTestDependencies.rules
 }

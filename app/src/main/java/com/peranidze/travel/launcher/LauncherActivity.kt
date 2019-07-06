@@ -1,25 +1,23 @@
 package com.peranidze.travel.launcher
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.peranidze.travel.base.BaseActivity
+import com.peranidze.travel.main.MainActivity
 import com.peranidze.travel.signin.SignInActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LauncherActivity : BaseActivity() {
 
-    val launcherViewModel: LauncherViewModel by viewModel()
+    private val launcherViewModel: LauncherViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         launcherViewModel.getUserIsLoggedInLiveData()
             .observe(this, Observer {
-                it?.let {
-                    if (it) startLogin()
-                    else startMain()
-                }
+                if (it) startMain()
+                else startLogin()
             })
     }
 
@@ -30,10 +28,12 @@ class LauncherActivity : BaseActivity() {
 
     private fun startLogin() {
         startActivity(SignInActivity.getIntent(this))
+        finish()
     }
 
     private fun startMain() {
-        Toast.makeText(this, "Not implemented yet", Toast.LENGTH_LONG).show()
+        startActivity(MainActivity.getIntent(this))
+        finish()
     }
 
 }

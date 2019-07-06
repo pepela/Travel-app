@@ -17,7 +17,11 @@ class TravelApplication : Application() {
         startKoin {
             androidContext(this@TravelApplication)
 
-            modules(listOf(applicationModule, launcherModule, loginModule, signUpModule, usersModule, tripsModule))
+            modules(
+                listOf(
+                    applicationModule, launcherModule, loginModule, signUpModule, usersModule, tripsModule, mainModule
+                )
+            )
         }
     }
 

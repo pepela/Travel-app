@@ -8,7 +8,7 @@ open class UserMapper(private val roleMapper: RoleMapper) : EntityMapper<UserMod
 
     override fun from(model: UserModel): User =
         with(model) {
-            User(id, email, roleMapper.from(role))
+            User(id, email, roleMapper.from(role), token)
         }
 
 }

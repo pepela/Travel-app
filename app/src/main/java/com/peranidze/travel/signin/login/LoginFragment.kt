@@ -2,15 +2,16 @@ package com.peranidze.travel.signin.login
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
+import com.peranidze.travel.extensions.isEmail
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,7 +31,7 @@ class LoginFragment : Fragment() {
         val TAG = LoginFragment::class.java.name
     }
 
-    val loginViewModel: LoginViewModel by viewModel()
+    private val loginViewModel: LoginViewModel by viewModel()
     private lateinit var listener: OnLoginFragmentInteractionListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -67,15 +68,31 @@ class LoginFragment : Fragment() {
         }
 
         login_btn.setOnClickListener {
-            if (!isEmailValid(login_email_tv.text.toString())) {
-                login_email_tv.error = getString(R.string.err_incorrect_email)
+            val email = login_email_et.text.toString()
+            val password = login_password_et.text.toString()
+            if (areFieldsCorrect(email, password)) {
+                login(email, password)
             } else {
-                login(login_email_tv.text.toString(), login_password_tv.text.toString())
+                showFieldErrors(login_email_et, login_password_et)
             }
         }
     }
 
-    private fun isEmailValid(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    private fun areFieldsCorrect(email: String, password: String) =
+        email.isEmail() && password.isNotEmpty()
+
+    private fun showFieldErrors(emailView: EditText, passwordView: EditText) {
+        val email = emailView.text.toString()
+        val password = passwordView.text.toString()
+
+        if (email.isEmpty()) {
+            emailView.error = getString(R.string.err_empty_email)
+        } else if (!email.isEmail()) {
+            emailView.error = getString(R.string.err_incorrect_email)
+        } else if (password.isEmpty()) {
+            passwordView.error = getString(R.string.err_empty_password)
+        }
+    }
 
     private fun login(email: String, password: String) {
         loginViewModel.doLogin(email, password)

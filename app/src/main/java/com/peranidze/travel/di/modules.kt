@@ -17,15 +17,17 @@ import com.peranidze.data.user.interactor.GetUsersUseCase
 import com.peranidze.data.user.interactor.LogInUserUseCase
 import com.peranidze.data.user.interactor.SignUpUserUseCase
 import com.peranidze.remote.trip.TripRemoteDataStoreImpl
-import com.peranidze.remote.trip.TripServiceFactory
+import com.peranidze.remote.trip.TripService
 import com.peranidze.remote.trip.mapper.TripMapper
+import com.peranidze.remote.trip.mock.TripServiceMockImpl
 import com.peranidze.remote.user.UserRemoteDataStoreImpl
-import com.peranidze.remote.user.UserServiceFactory
+import com.peranidze.remote.user.UserService
 import com.peranidze.remote.user.mapper.RoleMapper
 import com.peranidze.remote.user.mapper.UserMapper
-import com.peranidze.travel.BuildConfig
+import com.peranidze.remote.user.mock.UserServiceMockImpl
 import com.peranidze.travel.UiThread
 import com.peranidze.travel.launcher.LauncherViewModel
+import com.peranidze.travel.main.MainViewModel
 import com.peranidze.travel.signin.login.LoginViewModel
 import com.peranidze.travel.signin.signup.SignupViewModel
 import com.peranidze.travel.trips.TripsAdapter
@@ -47,13 +49,15 @@ val applicationModule = module(override = true) {
     single { UserDataStoreFactory(get()) }
     single<UserRepository> { UserDataRepository(get()) }
     single<UserDataStore> { UserRemoteDataStoreImpl(get(), get()) }
-    single { UserServiceFactory.makeUserServiceFactory(BuildConfig.DEBUG) }
+    //single { UserServiceFactory.makeUserServiceFactory(BuildConfig.DEBUG) }
+    single<UserService> { UserServiceMockImpl() }
 
     // Trips
     single { TripDataStoreFactory(get()) }
     single<TripRepository> { TripDataRepository(get()) }
     single<TripDataStore> { TripRemoteDataStoreImpl(get(), get()) }
-    single { TripServiceFactory.makeTripService(BuildConfig.DEBUG) }
+    //single { TripServiceFactory.makeTripService(BuildConfig.DEBUG) }
+    single<TripService> { TripServiceMockImpl() }
 
     // Mappers
     single { RoleMapper() }
@@ -67,12 +71,12 @@ val launcherModule = module {
 
 val loginModule = module {
     single { LogInUserUseCase(get(), get(), get()) }
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
 }
 
 val signUpModule = module {
     single { SignUpUserUseCase(get(), get(), get()) }
-    viewModel { SignupViewModel(get()) }
+    viewModel { SignupViewModel(get(), get()) }
 }
 
 val usersModule = module {
@@ -85,4 +89,8 @@ val tripsModule = module {
     single { GetTripsUseCase(get(), get(), get()) }
     single { TripsAdapter() }
     viewModel { TripsViewModel(get()) }
+}
+
+val mainModule = module {
+    viewModel { MainViewModel(get()) }
 }

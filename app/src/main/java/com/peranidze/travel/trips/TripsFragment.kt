@@ -21,8 +21,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TripsFragment : Fragment() {
 
-    val adapter: TripsAdapter by inject()
-    val tripsViewModel: TripsViewModel by viewModel()
+    private val adapter: TripsAdapter by inject()
+    private val tripsViewModel: TripsViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_trips, container, false)

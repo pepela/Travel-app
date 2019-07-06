@@ -22,8 +22,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UsersFragment : Fragment() {
 
-    val adapter: UsersAdapter by inject()
-    val usersViewModel: UsersViewModel by viewModel()
+    private val adapter: UsersAdapter by inject()
+    private val usersViewModel: UsersViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_users, container, false)
@@ -31,6 +31,7 @@ class UsersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        setupClickListener()
         observeUsersLiveData()
         usersViewModel.fetchUsers()
     }
@@ -41,6 +42,12 @@ class UsersFragment : Fragment() {
         users_rv.layoutManager = LinearLayoutManager(context)
         users_rv.addItemDecoration(DividerItemDecoration(context, VERTICAL))
         adapter.clickSubject.subscribe {
+            findNavController().navigate(R.id.action_users_dest_to_user)
+        }
+    }
+
+    private fun setupClickListener() {
+        add_user_fab.setOnClickListener {
             findNavController().navigate(R.id.action_users_dest_to_user)
         }
     }

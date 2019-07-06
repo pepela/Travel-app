@@ -21,6 +21,7 @@ class UserMapperTest {
     companion object {
         const val USER_ID = 1L
         const val USER_EMAIL = "mock@mockito.com"
+        const val TOKEN = "mock123token"
         val USER_MODEL_ROLE = RoleModel.REGULAR
         val USER_ROLE = Role.REGULAR
     }
@@ -34,8 +35,8 @@ class UserMapperTest {
 
     @Test
     fun `maps model to entity`() {
-        val userModel = UserModel(USER_ID, USER_EMAIL, USER_MODEL_ROLE)
-        val userShouldBe = User(USER_ID, USER_EMAIL, USER_ROLE)
+        val userModel = UserModel(USER_ID, USER_EMAIL, USER_MODEL_ROLE, TOKEN)
+        val userShouldBe = User(USER_ID, USER_EMAIL, USER_ROLE, TOKEN)
         val mappedUser = userMapper.from(userModel)
 
         assertEquals(userShouldBe, mappedUser)
