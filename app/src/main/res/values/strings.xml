@@ -16,7 +16,7 @@
 
     <!-- trip -->
     <string name="action_trip_save">Save</string>
-    <string name="action_trip_add_user">Add</string>
+    <string name="action_trip_new_user">New</string>
     <string name="action_trip_start_date">Start date</string>
     <string name="action_trip_end_date">End date</string>
 

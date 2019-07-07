@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -157,8 +156,10 @@ class TripFragment : Fragment() {
                 trip_comment_et.setText(comment)
             }
             with(pair.second) {
-                val arrayAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, this.map { it.email })
-                trip_users_spinner.adapter = arrayAdapter
+                context?.let {
+                    val arrayAdapter = UserAdapter(it, this)
+                    trip_users_spinner.adapter = arrayAdapter
+                }
             }
         }
     }

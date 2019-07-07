@@ -112,7 +112,6 @@ class LoginFragment : Fragment() {
         user?.let {
             listener.onLoggedIn(it)
         }
-        Toast.makeText(context, user.toString(), Toast.LENGTH_LONG).show()
     }
 
 }

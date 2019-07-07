@@ -87,7 +87,7 @@
             android:id="@+id/trip_add_user_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/action_trip_add_user"
+            android:text="@string/action_trip_new_user"
             android:layout_marginTop="@dimen/fragment_vertical_margin"
             android:layout_marginEnd="@dimen/fragment_horizontal_margin"
             app:layout_constraintEnd_toEndOf="parent"
