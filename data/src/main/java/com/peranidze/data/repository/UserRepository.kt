@@ -10,7 +10,9 @@ interface UserRepository {
 
     fun signUpUser(email: String, password: String): Single<User>
 
-    fun getUsers():Single<List<User>>
+    fun getUser(id: Long): Single<User>
+
+    fun getUsers(): Single<List<User>>
 
     fun deleteUser(id: Long): Completable
 

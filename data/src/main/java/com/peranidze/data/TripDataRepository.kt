@@ -8,6 +8,9 @@ import io.reactivex.Single
 
 class TripDataRepository(private val tripDataStoreFactory: TripDataStoreFactory) : TripRepository {
 
+    override fun getTrip(id: Long): Single<Trip> =
+        tripDataStoreFactory.getDataSource().getTrip(id)
+
     override fun getTripsFor(userId: Long): Single<List<Trip>> =
         tripDataStoreFactory.getDataSource().getTripsFor(userId)
 
@@ -18,5 +21,4 @@ class TripDataRepository(private val tripDataStoreFactory: TripDataStoreFactory)
     override fun deleteTrip(id: Long): Completable {
         TODO("not implemented")
     }
-
 }

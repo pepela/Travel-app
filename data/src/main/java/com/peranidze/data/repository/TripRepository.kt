@@ -6,6 +6,8 @@ import io.reactivex.Single
 
 interface TripRepository {
 
+    fun getTrip(id: Long): Single<Trip>
+
     fun getTripsFor(userId: Long): Single<List<Trip>>
 
     fun updateTrip(trip: Trip): Completable

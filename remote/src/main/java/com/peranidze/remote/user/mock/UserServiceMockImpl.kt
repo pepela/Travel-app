@@ -22,6 +22,9 @@ class UserServiceMockImpl : UserService {
                 Single.just(UserModel(1, "mock@email.com", RoleModel.REGULAR, "TOKEN_IS_THIS_AND_NOTHING_ELSE"))
             }
 
+    override fun getUser(userId: Long): Single<UserModel> =
+        Single.just(UserModel(userId, "mock@user", RoleModel.REGULAR, ""))
+
     override fun getUsers(): Single<List<UserModel>> =
         Single.timer(2, TimeUnit.SECONDS)
             .flatMap {

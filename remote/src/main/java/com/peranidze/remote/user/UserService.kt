@@ -7,6 +7,7 @@ import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface UserService {
 
@@ -15,6 +16,9 @@ interface UserService {
 
     @POST("users/register")
     fun signUp(@Body signUpRequestBody: SignUpRequestBody): Single<UserModel>
+
+    @GET("")
+    fun getUser(@Query("id") id: Long): Single<UserModel>
 
     @GET("")
     fun getUsers(): Single<List<UserModel>>

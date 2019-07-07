@@ -7,14 +7,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.peranidze.data.trip.model.Trip
 import com.peranidze.travel.R
 import com.peranidze.travel.extensions.toDateString
 import com.peranidze.travel.views.DatePickerFragment
 import kotlinx.android.synthetic.main.fragment_trip.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class TripFragment : Fragment() {
 
+    private val tripViewModel: TripViewModel by viewModel()
     private var startDate: Date? = null
     private var endDate: Date? = null
 
@@ -24,11 +27,14 @@ class TripFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupListeners()
+        observeTripLiveData()
 
         arguments?.let {
-            val tripId = TripFragmentArgs.fromBundle(it).tripId
-
-            Toast.makeText(context, tripId.toString(), Toast.LENGTH_LONG).show()
+            with(TripFragmentArgs.fromBundle(it).tripId) {
+                if (this > 0) {
+                    tripViewModel.fetchTrip(this)
+                }
+            }
         }
     }
 
@@ -47,7 +53,7 @@ class TripFragment : Fragment() {
 
     private fun setupStartDateClickListener() {
         val fm = fragmentManager
-        val startDateTv = trip_start_date_tv
+        val startDateTv = trip_start_date_btn
         startDateTv.setOnClickListener {
             with(DatePickerFragment.getInstance(null, endDate)) {
                 onDateSelectedListener = object : DatePickerFragment.OnDateSelectedListener {
@@ -65,7 +71,7 @@ class TripFragment : Fragment() {
 
     private fun setupEndDateClickListener() {
         val fm = fragmentManager
-        val endDateTv = trip_end_date_tv
+        val endDateTv = trip_end_date_btn
         endDateTv.setOnClickListener {
             with(DatePickerFragment.getInstance(startDate, null)) {
                 onDateSelectedListener = object : DatePickerFragment.OnDateSelectedListener {
@@ -79,5 +85,39 @@ class TripFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun observeTripLiveData() {
+        tripViewModel.getTripLiveData().observe(this, androidx.lifecycle.Observer {
+            it.let {
+                when (it) {
+                    is TripState.Loading -> handleLoading()
+                    is TripState.Success -> handleSuccess(it.data)
+                    is TripState.Error -> handleError(it.errorMessage)
+                }
+            }
+        })
+    }
+
+    private fun handleLoading() {
+        trip_progress.visibility = View.VISIBLE
+        trip_group.visibility = View.GONE
+    }
+
+    private fun handleSuccess(trip: Trip?) {
+        trip_progress.visibility = View.GONE
+        trip_group.visibility = View.VISIBLE
+        trip?.let {
+            trip_destination_et.setText(it.destination)
+            trip_start_date_btn.text = it.startDate.toDateString()
+            trip_end_date_btn.text = it.endDate.toDateString()
+            trip_comment_et.setText(it.comment)
+        }
+    }
+
+    private fun handleError(message: String?) {
+        trip_progress.visibility = View.GONE
+        trip_group.visibility = View.VISIBLE
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

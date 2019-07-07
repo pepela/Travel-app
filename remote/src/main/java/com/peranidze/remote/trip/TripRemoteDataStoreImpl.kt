@@ -10,6 +10,12 @@ class TripRemoteDataStoreImpl(
     private val tripMapper: TripMapper
 ) : TripDataStore {
 
+    override fun getTrip(id: Long): Single<Trip> =
+        tripService.getTrip(id)
+            .map {
+                tripMapper.from(it)
+            }
+
     override fun getTripsFor(userId: Long): Single<List<Trip>> =
         tripService.getTrips()
             .map {

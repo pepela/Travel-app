@@ -5,6 +5,7 @@ import com.peranidze.data.user.model.User
 import com.peranidze.remote.user.mapper.UserMapper
 import com.peranidze.remote.user.request.LogInRequestBody
 import com.peranidze.remote.user.request.SignUpRequestBody
+import io.reactivex.Completable
 import io.reactivex.Single
 
 class UserRemoteDataStoreImpl(
@@ -24,10 +25,23 @@ class UserRemoteDataStoreImpl(
                 userMapper.from(it)
             }
 
+    override fun getUser(id: Long): Single<User> =
+        userService.getUser(id)
+            .map {
+                userMapper.from(it)
+            }
+
     override fun getUsers(): Single<List<User>> =
         userService.getUsers()
             .map {
                 userMapper.from(it)
             }
 
+    override fun deleteUser(id: Long): Completable {
+        TODO("not implemented")
+    }
+
+    override fun updateUser(user: User): Completable {
+        TODO("not implemented")
+    }
 }

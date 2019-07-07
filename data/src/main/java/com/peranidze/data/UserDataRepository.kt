@@ -14,6 +14,9 @@ class UserDataRepository(private val userDataStoreFactory: UserDataStoreFactory)
     override fun signUpUser(email: String, password: String): Single<User> =
         userDataStoreFactory.getDataSource().signUpUser(email, password)
 
+    override fun getUser(id: Long): Single<User> =
+        userDataStoreFactory.getDataSource().getUser(id)
+
     override fun getUsers(): Single<List<User>> =
         userDataStoreFactory.getDataSource().getUsers()
 

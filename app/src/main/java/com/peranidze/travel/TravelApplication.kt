@@ -19,7 +19,15 @@ class TravelApplication : Application() {
 
             modules(
                 listOf(
-                    applicationModule, launcherModule, loginModule, signUpModule, usersModule, tripsModule, mainModule
+                    applicationModule,
+                    launcherModule,
+                    loginModule,
+                    signUpModule,
+                    usersModule,
+                    userModule,
+                    tripsModule,
+                    tripModule,
+                    mainModule
                 )
             )
         }

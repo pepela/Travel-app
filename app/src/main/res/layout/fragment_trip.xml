@@ -26,7 +26,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-            android:id="@+id/trip_start_date_tv"
+            android:id="@+id/trip_start_date_btn"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -36,11 +36,11 @@
             android:layout_marginStart="@dimen/fragment_horizontal_margin"
             app:layout_constraintTop_toBottomOf="@+id/trip_destination_til"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/trip_end_date_tv"
+            app:layout_constraintEnd_toStartOf="@+id/trip_end_date_btn"
             tools:text="18.07.2022"/>
 
     <com.google.android.material.button.MaterialButton
-            android:id="@+id/trip_end_date_tv"
+            android:id="@+id/trip_end_date_btn"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:layout_marginTop="@dimen/fragment_vertical_margin"
             android:layout_marginEnd="@dimen/fragment_horizontal_margin"
             app:layout_constraintTop_toBottomOf="@+id/trip_destination_til"
-            app:layout_constraintStart_toEndOf="@+id/trip_start_date_tv"
+            app:layout_constraintStart_toEndOf="@+id/trip_start_date_btn"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="05.08.2022"/>
 
@@ -60,7 +60,7 @@
             android:layout_marginTop="@dimen/fragment_vertical_margin"
             android:layout_marginStart="@dimen/fragment_horizontal_margin"
             android:layout_marginEnd="@dimen/fragment_horizontal_margin"
-            app:layout_constraintTop_toBottomOf="@+id/trip_start_date_tv"
+            app:layout_constraintTop_toBottomOf="@+id/trip_start_date_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -97,7 +97,7 @@
             android:id="@+id/trip_users_group"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:constraint_referenced_ids="trip_users_spinner,trip_add_user_btn"
             tools:visibility="visible"/>
 
@@ -113,4 +113,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="1.0"/>
+
+    <ProgressBar
+            android:id="@+id/trip_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.Group
+            android:id="@+id/trip_group"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:constraint_referenced_ids="trip_destination_til,trip_start_date_btn, trip_end_date_btn,trip_comment_til,trip_save_btn"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

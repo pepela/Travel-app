@@ -12,7 +12,9 @@ import com.peranidze.data.source.trip.TripDataStore
 import com.peranidze.data.source.trip.TripDataStoreFactory
 import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.source.user.UserDataStoreFactory
+import com.peranidze.data.trip.interactor.GetTripUseCase
 import com.peranidze.data.trip.interactor.GetTripsUseCase
+import com.peranidze.data.user.interactor.GetUserUseCase
 import com.peranidze.data.user.interactor.GetUsersUseCase
 import com.peranidze.data.user.interactor.LogInUserUseCase
 import com.peranidze.data.user.interactor.SignUpUserUseCase
@@ -30,8 +32,10 @@ import com.peranidze.travel.launcher.LauncherViewModel
 import com.peranidze.travel.main.MainViewModel
 import com.peranidze.travel.signin.login.LoginViewModel
 import com.peranidze.travel.signin.signup.SignupViewModel
+import com.peranidze.travel.trip.TripViewModel
 import com.peranidze.travel.trips.TripsAdapter
 import com.peranidze.travel.trips.TripsViewModel
+import com.peranidze.travel.user.UserViewModel
 import com.peranidze.travel.users.UsersAdapter
 import com.peranidze.travel.users.UsersViewModel
 import org.koin.android.ext.koin.androidContext
@@ -85,10 +89,20 @@ val usersModule = module {
     viewModel { UsersViewModel(get()) }
 }
 
+val userModule = module {
+    single { GetUserUseCase(get(), get(), get()) }
+    viewModel { UserViewModel(get()) }
+}
+
 val tripsModule = module {
     single { GetTripsUseCase(get(), get(), get()) }
     single { TripsAdapter() }
     viewModel { TripsViewModel(get()) }
+}
+
+val tripModule = module {
+    single { GetTripUseCase(get(), get(), get()) }
+    viewModel { TripViewModel(get()) }
 }
 
 val mainModule = module {

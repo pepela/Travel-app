@@ -8,7 +8,7 @@ open class TripMapper : EntityMapper<TripModel, Trip> {
 
     override fun from(model: TripModel): Trip =
         with(model) {
-            Trip(id, destination, startDate, endDate)
+            Trip(id, destination, startDate, endDate, comment)
         }
 
 }

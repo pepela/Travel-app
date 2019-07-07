@@ -18,12 +18,13 @@ class TripMapperTest {
         const val TRIP_DESTINATION = "mock destination"
         val TRIP_START_DATE = Date()
         val TRIP_END_DATE = Date()
+        const val TRIP_COMMENT = "mock comment"
     }
 
     @Test
     fun `maps model to entity`() {
-        val tripModel = TripModel(TRIP_ID, TRIP_DESTINATION, TRIP_START_DATE, TRIP_END_DATE)
-        val tripShouldBe = Trip(TRIP_ID, TRIP_DESTINATION, TRIP_START_DATE, TRIP_END_DATE)
+        val tripModel = TripModel(TRIP_ID, TRIP_DESTINATION, TRIP_START_DATE, TRIP_END_DATE, TRIP_COMMENT)
+        val tripShouldBe = Trip(TRIP_ID, TRIP_DESTINATION, TRIP_START_DATE, TRIP_END_DATE, TRIP_COMMENT)
         val mappedTrip = tripMapper.from(tripModel)
 
         assertEquals(tripShouldBe, mappedTrip)
