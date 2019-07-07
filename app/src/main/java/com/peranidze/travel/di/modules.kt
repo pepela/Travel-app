@@ -102,7 +102,7 @@ val tripsModule = module {
 
 val tripModule = module {
     single { GetTripUseCase(get(), get(), get()) }
-    viewModel { TripViewModel(get()) }
+    viewModel { TripViewModel(get(), get()) }
 }
 
 val mainModule = module {

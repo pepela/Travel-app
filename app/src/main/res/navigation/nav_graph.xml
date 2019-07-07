@@ -29,6 +29,7 @@
                 android:id="@+id/action_trip_dest_to_user_dest"
                 app:destination="@id/user_dest"/>
         <argument android:name="tripId" app:argType="long" android:defaultValue="-1L"/>
+        <argument android:name="isForAdmin" app:argType="boolean" android:defaultValue="false"/>
     </fragment>
     <fragment
             android:id="@+id/user_dest"
