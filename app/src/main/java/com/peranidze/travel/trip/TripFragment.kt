@@ -46,7 +46,6 @@ class TripFragment : Fragment() {
     }
 
     private fun setupListeners() {
-
         trip_save_btn.setOnClickListener {
         }
 

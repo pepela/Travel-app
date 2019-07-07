@@ -54,7 +54,8 @@ class UsersFragment : Fragment() {
 
     private fun setupAdapterClickListener() {
         adapterClickDisposable = adapter.clickSubject.subscribe {
-            findNavController().navigate(R.id.action_users_dest_to_user)
+            val action = UsersFragmentDirections.actionUsersDestToUser(it.id, Math.random() < 0.5)
+            findNavController().navigate(action)
         }
     }
 
