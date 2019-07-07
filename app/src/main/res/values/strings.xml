@@ -4,14 +4,24 @@
     <string name="title_empty_trips">Add trip to see them</string>
     <string name="title_empty_users">There are no users</string>
 
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
     <!-- user -->
     <string name="action_save_user">Save</string>
 
+    <string name="hint_user_email">@string/email</string>
+    <string name="hint_user_password">@string/password</string>
+
 
     <!-- trip -->
-    <string name="action_save_trip">Save</string>
-    <string name="action_start_date">Start date</string>
-    <string name="action_end_date">End date</string>
+    <string name="action_trip_save">Save</string>
+    <string name="action_trip_add_user">Add</string>
+    <string name="action_trip_start_date">Start date</string>
+    <string name="action_trip_end_date">End date</string>
+
+    <string name="title_trip_destination">Destination</string>
+    <string name="title_trip_comment">Comment</string>
 
 
     <!-- Sign up -->
@@ -19,8 +29,8 @@
     <string name="action_create_account">Create account</string>
     <string name="action_sign_up">Sign up</string>
 
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_email">@string/email</string>
+    <string name="hint_password">@string/password</string>
     <string name="hint_repeat_password">Repeat password</string>
 
     <string name="err_empty_email">Please enter email</string>

@@ -18,6 +18,7 @@ import com.peranidze.travel.R
 import com.peranidze.travel.extensions.hideSoftKeyboard
 import com.peranidze.travel.extensions.showSoftKeyboard
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.fragment_trip.*
 import kotlinx.android.synthetic.main.fragment_trips.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,7 +37,7 @@ class TripsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setupClickListener()
+        setupClickListeners()
         setupRecyclerView()
         setupAdapterClickListener()
         observeUsersLiveData()
@@ -115,7 +116,7 @@ class TripsFragment : Fragment() {
         }
     }
 
-    private fun setupClickListener() {
+    private fun setupClickListeners() {
         add_trip_fab.setOnClickListener {
             findNavController().navigate(R.id.action_trips_dest_to_trip)
         }

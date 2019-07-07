@@ -3,11 +3,15 @@
     <dimen name="recycler_view_item_horizontal_margin">16dp</dimen>
     <dimen name="recycler_view_item_vertical_margin">8dp</dimen>
 
-    <dimen name="details_activity_horizontal_margin">16dp</dimen>
-    <dimen name="details_activity_vertical_margin">24dp</dimen>
+    <dimen name="sign_in_top_margin">56dp</dimen>
+    <dimen name="sign_in_button_top_margin">64dp</dimen>
+
+    <dimen name="fragment_horizontal_margin">16dp</dimen>
+    <dimen name="fragment_vertical_margin">24dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="recycler_view_padding">8dp</dimen>
+
     <dimen name="trip_card_elevation">6dp</dimen>
     <dimen name="trip_card_corner_radius">6dp</dimen>
     <dimen name="trip_card_margin">8dp</dimen>

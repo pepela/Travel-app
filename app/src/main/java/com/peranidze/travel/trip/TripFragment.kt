@@ -25,7 +25,7 @@ class TripFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupListeners()
 
-        arguments?.let{
+        arguments?.let {
             val tripId = TripFragmentArgs.fromBundle(it).tripId
 
             Toast.makeText(context, tripId.toString(), Toast.LENGTH_LONG).show()
@@ -33,12 +33,20 @@ class TripFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        val fm = fragmentManager
 
         trip_save_btn.setOnClickListener {
-            findNavController().navigate(R.id.action_trip_dest_to_user_dest)
         }
 
+        setupStartDateClickListener()
+        setupEndDateClickListener()
+
+        trip_add_user_btn.setOnClickListener {
+            findNavController().navigate(R.id.action_trip_dest_to_user_dest)
+        }
+    }
+
+    private fun setupStartDateClickListener() {
+        val fm = fragmentManager
         val startDateTv = trip_start_date_tv
         startDateTv.setOnClickListener {
             with(DatePickerFragment.getInstance(null, endDate)) {
@@ -53,7 +61,10 @@ class TripFragment : Fragment() {
                 }
             }
         }
+    }
 
+    private fun setupEndDateClickListener() {
+        val fm = fragmentManager
         val endDateTv = trip_end_date_tv
         endDateTv.setOnClickListener {
             with(DatePickerFragment.getInstance(startDate, null)) {
