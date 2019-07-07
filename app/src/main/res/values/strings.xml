@@ -1,13 +1,17 @@
 <resources>
     <string name="app_name">Travel</string>
-    <string name="action_save_user">Save</string>
-    <string name="action_start_date">Start date</string>
-    <string name="action_end_date">End date</string>
-    <string name="action_trips">Trips</string>
-    <string name="actions_users">Users</string>
 
     <string name="title_empty_trips">Add trip to see them</string>
     <string name="title_empty_users">There are no users</string>
+
+    <!-- user -->
+    <string name="action_save_user">Save</string>
+
+
+    <!-- trip -->
+    <string name="action_save_trip">Save</string>
+    <string name="action_start_date">Start date</string>
+    <string name="action_end_date">End date</string>
 
 
     <!-- Sign up -->
@@ -32,5 +36,14 @@
     <string name="title_users">Users</string>
     <string name="title_trips">Trips</string>
     <string name="title_user">User</string>
+
+
+    <!-- drawer items -->
     <string name="action_logout">Logout</string>
+    <string name="action_trips">Trips</string>
+    <string name="actions_users">Users</string>
+
+    <!-- trips -->
+    <string name="action_search">Search</string>
+    <string name="content_description_destination">Destination</string>
 </resources>

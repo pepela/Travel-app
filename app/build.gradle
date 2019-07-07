@@ -48,6 +48,9 @@ dependencies {
     implementation appDependencies.ankoCommons
     implementation appDependencies.navigation
     implementation appDependencies.navigationUi
+    implementation appDependencies.glide
+
+    annotationProcessor appDependencies.glideCompiler
 
     testImplementation appTestDependencies.junit
     testImplementation appTestDependencies.koin

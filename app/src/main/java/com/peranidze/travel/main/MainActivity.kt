@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.peranidze.travel.R
@@ -21,6 +23,7 @@ class MainActivity : BaseActivity() {
     }
 
     private val mainViewModel: MainViewModel by viewModel()
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,15 +31,20 @@ class MainActivity : BaseActivity() {
         setupDrawerNavigation()
         setupListener()
         observeLogoutLiveData()
-
     }
 
-    override fun onSupportNavigateUp(): Boolean = findNavController(R.id.nav_host_fragment).navigateUp()
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
 
     private fun setupDrawerNavigation() {
         with(findNavController(R.id.nav_host_fragment)) {
             nav_view.setupWithNavController(this)
             setupActionBarWithNavController(this, drawer_layout)
+
+            appBarConfiguration = AppBarConfiguration(this.graph, drawer_layout)
+            setupActionBarWithNavController(this, appBarConfiguration)
         }
     }
 
@@ -58,8 +66,10 @@ class MainActivity : BaseActivity() {
 
     private fun startLogin() {
         startActivity(SignInActivity.getIntent(this).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    or Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        or Intent.FLAG_ACTIVITY_NEW_TASK
+            )
         })
     }
 

@@ -22,8 +22,8 @@ ext {
     gsonVersion = '2.8.5'
     okHttpVersion = '4.0.0'
     retrofitVersion = '2.6.0'
-    navVersion = "2.1.0-alpha06"
-    navVersionKtx = "2.1.0-alpha06"
+    navVersion = '2.1.0-alpha06'
+    glideVersoin = '4.9.0'
 
     //test
     jUnitVersion =            '4.12'
@@ -62,7 +62,9 @@ ext {
             archExtensions:      "androidx.lifecycle:lifecycle-extensions:${lifecycleVersion}",
             ankoCommons:         "org.jetbrains.anko:anko-commons:${ankoVersion}",
             navigation:          "androidx.navigation:navigation-fragment-ktx:${navVersion}",
-            navigationUi:        "androidx.navigation:navigation-ui-ktx:${navVersion}"
+            navigationUi:        "androidx.navigation:navigation-ui-ktx:${navVersion}",
+            glide:               "com.github.bumptech.glide:glide:${glideVersoin}",
+            glideCompiler:       "com.github.bumptech.glide:compiler:${glideVersoin}"
     ]
 
     appTestDependencies = [

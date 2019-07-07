@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.peranidze.travel.R
@@ -23,6 +24,12 @@ class TripFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupListeners()
+
+        arguments?.let{
+            val tripId = TripFragmentArgs.fromBundle(it).tripId
+
+            Toast.makeText(context, tripId.toString(), Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun setupListeners() {

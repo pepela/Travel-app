@@ -59,7 +59,7 @@
             android:id="@+id/trip_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/action_save_user"
+            android:text="@string/action_save_trip"
             android:layout_marginBottom="@dimen/details_activity_vertical_margin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -17,19 +17,22 @@ class UserServiceMockImpl : UserService {
             }
 
     override fun signUp(signUpRequestBody: SignUpRequestBody): Single<UserModel> =
-        Single.timer(4, TimeUnit.SECONDS)
+        Single.timer(3, TimeUnit.SECONDS)
             .flatMap {
                 Single.just(UserModel(1, "mock@email.com", RoleModel.REGULAR, "TOKEN_IS_THIS_AND_NOTHING_ELSE"))
             }
 
     override fun getUsers(): Single<List<UserModel>> =
-        Single.timer(6, TimeUnit.SECONDS)
+        Single.timer(2, TimeUnit.SECONDS)
             .flatMap {
                 Single.just(
                     listOf(
-                        UserModel(1L, "giorgi@test.ge", RoleModel.MANAGER, "ASDADS"),
-                        UserModel(2L, "mutela@test.ge", RoleModel.REGULAR, "Asdasdasd"),
-                        UserModel(3L, "yleqala@test.ge", RoleModel.ADMIN, "12w121wsadws")
+                        UserModel(1L, "admin@test.ge", RoleModel.ADMIN, "ASDADS"),
+                        UserModel(2L, "manager@test.ge", RoleModel.MANAGER, "Asdasdasd"),
+                        UserModel(3L, "user2@test.ge", RoleModel.REGULAR, "12w121wsadws"),
+                        UserModel(4L, "user3@test.ge", RoleModel.REGULAR, "12w121wsadws"),
+                        UserModel(5L, "user4@test.ge", RoleModel.REGULAR, "12w121wsadws"),
+                        UserModel(6L, "user5@test.ge", RoleModel.REGULAR, "12w121wsadws")
                     )
                 )
             }
