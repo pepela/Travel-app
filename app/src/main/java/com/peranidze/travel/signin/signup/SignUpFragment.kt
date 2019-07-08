@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
+import com.peranidze.travel.base.BaseFragment
 import com.peranidze.travel.extensions.isEmail
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SignUpFragment : Fragment() {
+class SignUpFragment : BaseFragment() {
 
     interface OnSignUpFragmentInteractionListener {
         fun onSignedUp(user: User)
@@ -109,7 +108,7 @@ class SignUpFragment : Fragment() {
 
     private fun handleError(errorMessage: String?) {
         listener.showSignUpLoading(false)
-        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+        showErrorMessage(errorMessage)
     }
 
     private fun handleSuccess(user: User?) {

@@ -6,8 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -15,12 +13,13 @@ import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
+import com.peranidze.travel.base.BaseFragment
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_users.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UsersFragment : Fragment() {
+class UsersFragment : BaseFragment() {
 
     private val adapter: UsersAdapter by inject()
     private val usersViewModel: UsersViewModel by viewModel()
@@ -98,6 +97,6 @@ class UsersFragment : Fragment() {
         users_progress.visibility = GONE
         users_empty_tv.visibility = VISIBLE
         users_rv.visibility = GONE
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        showErrorMessage(message)
     }
 }

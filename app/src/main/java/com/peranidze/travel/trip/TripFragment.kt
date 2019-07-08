@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.peranidze.data.trip.model.Trip
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
+import com.peranidze.travel.base.BaseFragment
 import com.peranidze.travel.extensions.toDateString
 import com.peranidze.travel.users.UsersState
 import com.peranidze.travel.views.DatePickerFragment
@@ -18,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_trip.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class TripFragment : Fragment() {
+class TripFragment : BaseFragment() {
 
     private val tripViewModel: TripViewModel by viewModel()
     private var startDate: Date? = null
@@ -160,7 +159,7 @@ class TripFragment : Fragment() {
     private fun handleTripError(message: String?) {
         trip_progress.visibility = GONE
         trip_group.visibility = VISIBLE
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        showErrorMessage(message)
     }
 
     private fun handleTripAndUsersSuccess(pair: Pair<Trip, List<User>>?) {
@@ -189,7 +188,7 @@ class TripFragment : Fragment() {
         trip_progress.visibility = GONE
         trip_group.visibility = VISIBLE
         trip_users_group.visibility = VISIBLE
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        showErrorMessage(message)
     }
 
     private fun handleUsersSuccess(users: List<User>?) {

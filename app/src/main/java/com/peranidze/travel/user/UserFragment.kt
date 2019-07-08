@@ -6,15 +6,15 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.peranidze.data.user.model.Role
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
+import com.peranidze.travel.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_user.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UserFragment : Fragment() {
+class UserFragment : BaseFragment() {
 
     private val userViewModel: UserViewModel by viewModel()
 
@@ -85,7 +85,7 @@ class UserFragment : Fragment() {
     }
 
     private fun handleError(message: String?) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        showErrorMessage(message)
     }
 
     private fun showRoleTextView(role: Role) {
