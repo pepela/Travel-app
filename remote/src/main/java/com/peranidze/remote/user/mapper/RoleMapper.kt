@@ -13,4 +13,10 @@ open class RoleMapper : EntityMapper<RoleModel, Role> {
             RoleModel.ADMIN -> Role.ADMIN
         }
 
+    override fun toModel(entity: Role): RoleModel =
+        when (entity) {
+            Role.REGULAR -> RoleModel.REGULAR
+            Role.MANAGER -> RoleModel.MANAGER
+            Role.ADMIN -> RoleModel.ADMIN
+        }
 }

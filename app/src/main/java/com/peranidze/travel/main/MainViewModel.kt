@@ -11,7 +11,7 @@ class MainViewModel(private val preferenceHelper: PreferenceHelper) : ViewModel(
     fun getLogoutLiveData() = logoutLiveData
 
     fun logout() {
-        preferenceHelper.isUserLoggedIn = false
+        preferenceHelper.clear()
         logoutLiveData.value = preferenceHelper.isUserLoggedIn
     }
 }

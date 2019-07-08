@@ -16,6 +16,6 @@ interface UserRepository {
 
     fun deleteUser(id: Long): Completable
 
-    fun updateUser(user: User): Completable
+    fun updateUser(user: User): Single<User>
 
 }

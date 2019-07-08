@@ -11,4 +11,8 @@ open class TripMapper : EntityMapper<TripModel, Trip> {
             Trip(id, destination, startDate, endDate, comment)
         }
 
+    override fun toModel(entity: Trip): TripModel =
+        with(entity) {
+            TripModel(id, destination, startDate, endDate, comment)
+        }
 }

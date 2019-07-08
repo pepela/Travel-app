@@ -10,7 +10,7 @@ interface TripRepository {
 
     fun getTripsFor(userId: Long): Single<List<Trip>>
 
-    fun updateTrip(trip: Trip): Completable
+    fun updateTrip(trip: Trip): Single<Trip>
 
     fun deleteTrip(id: Long): Completable
 

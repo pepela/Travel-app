@@ -37,11 +37,13 @@ class UserRemoteDataStoreImpl(
                 userMapper.from(it)
             }
 
-    override fun deleteUser(id: Long): Completable {
-        TODO("not implemented")
-    }
+    override fun deleteUser(id: Long): Completable =
+        userService.deleteUser(id)
 
-    override fun updateUser(user: User): Completable {
-        TODO("not implemented")
-    }
+
+    override fun updateUser(user: User): Single<User> =
+        userService.updateUser(user.id, userMapper.toModel(user))
+            .map {
+                userMapper.from(it)
+            }
 }

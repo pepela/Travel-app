@@ -2,6 +2,7 @@ package com.peranidze.remote.trip.mock
 
 import com.peranidze.remote.trip.TripService
 import com.peranidze.remote.trip.model.TripModel
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -29,4 +30,9 @@ class TripServiceMockImpl : TripService {
 
     override fun getTrips(): Single<List<TripModel>> =
         Single.timer(2, TimeUnit.SECONDS).flatMap { Single.just(trips) }
+
+    override fun updateTrip(id: Long, tripModel: TripModel): Single<TripModel> =
+        Single.timer(1, TimeUnit.SECONDS).flatMap { Single.just(tripModel) }
+
+    override fun deleteTrip(id: Long): Completable = Completable.complete()
 }

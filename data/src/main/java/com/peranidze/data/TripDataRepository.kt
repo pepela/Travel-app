@@ -14,11 +14,9 @@ class TripDataRepository(private val tripDataStoreFactory: TripDataStoreFactory)
     override fun getTripsFor(userId: Long): Single<List<Trip>> =
         tripDataStoreFactory.getDataSource().getTripsFor(userId)
 
-    override fun updateTrip(trip: Trip): Completable {
-        TODO("not implemented")
-    }
+    override fun updateTrip(trip: Trip): Single<Trip> =
+        tripDataStoreFactory.getDataSource().updateTrip(trip)
 
-    override fun deleteTrip(id: Long): Completable {
-        TODO("not implemented")
-    }
+    override fun deleteTrip(id: Long): Completable =
+        tripDataStoreFactory.getDataSource().deleteTrip(id)
 }

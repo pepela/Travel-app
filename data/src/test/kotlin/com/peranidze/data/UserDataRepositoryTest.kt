@@ -5,8 +5,8 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.source.user.UserDataStoreFactory
-import com.peranidze.data.user.model.Role
-import com.peranidze.data.user.model.User
+import com.peranidze.data.test.factory.UserFactory
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -17,9 +17,11 @@ import org.junit.runners.JUnit4
 class UserDataRepositoryTest {
 
     companion object {
-        const val EMAIL = "mock_email"
-        const val PASSWORD = "mock_password"
-        val USER = User(1, EMAIL, Role.REGULAR)
+        private const val USER_ID = 1L
+        private const val EMAIL = "mock_email"
+        private const val PASSWORD = "mock_password"
+        private val USER = UserFactory.makeUser()
+        private val USERS = UserFactory.makeUsers()
     }
 
     private val remoteDataStore = mock<UserDataStore>()
@@ -32,7 +34,10 @@ class UserDataRepositoryTest {
         whenever(userDataStoreFactory.getDataSource()).thenReturn(remoteDataStore)
         whenever(remoteDataStore.logInUser(any(), any())).thenReturn(Single.just(USER))
         whenever(remoteDataStore.signUpUser(any(), any())).thenReturn(Single.just(USER))
-        whenever(remoteDataStore.getUsers()).thenReturn(Single.just(listOf(USER, USER, USER)))
+        whenever(remoteDataStore.getUsers()).thenReturn(Single.just(USERS))
+        whenever(remoteDataStore.getUser(any())).thenReturn(Single.just(USER))
+        whenever(remoteDataStore.updateUser(any())).thenReturn(Single.just(USER))
+        whenever(remoteDataStore.deleteUser(any())).thenReturn(Completable.complete())
     }
 
     @Test
@@ -48,9 +53,28 @@ class UserDataRepositoryTest {
     }
 
     @Test
+    fun `getUser returns user`() {
+        val testObserver = userRepository.getUser(USER_ID).test()
+        testObserver.assertValue(USER)
+    }
+
+    @Test
     fun `getUsers returns users`() {
         val testObserver = userRepository.getUsers().test()
-        testObserver.assertValue(listOf(USER, USER, USER))
+        testObserver.assertValue(USERS)
+    }
+
+
+    @Test
+    fun `updateUser returns user`() {
+        val testObserver = userRepository.updateUser(USER).test()
+        testObserver.assertValue(USER)
+    }
+
+    @Test
+    fun `deleteUser completes`() {
+        val testObserver = userRepository.deleteUser(USER_ID).test()
+        testObserver.assertComplete()
     }
 
 }

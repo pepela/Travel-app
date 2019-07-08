@@ -29,4 +29,13 @@ class TripMapperTest {
 
         assertEquals(tripShouldBe, mappedTrip)
     }
+
+    @Test
+    fun `maps entity to model`() {
+        val trip = Trip(TRIP_ID, TRIP_DESTINATION, TRIP_START_DATE, TRIP_END_DATE, TRIP_COMMENT)
+        val tripShouldBe = TripModel(TRIP_ID, TRIP_DESTINATION, TRIP_START_DATE, TRIP_END_DATE, TRIP_COMMENT)
+        val mappedTrip = tripMapper.toModel(trip)
+
+        assertEquals(tripShouldBe, mappedTrip)
+    }
 }

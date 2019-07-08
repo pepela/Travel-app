@@ -31,6 +31,9 @@ class UserMapperTest {
         whenever(roleMapper.from(RoleModel.REGULAR)).thenReturn(Role.REGULAR)
         whenever(roleMapper.from(RoleModel.ADMIN)).thenReturn(Role.ADMIN)
         whenever(roleMapper.from(RoleModel.MANAGER)).thenReturn(Role.MANAGER)
+        whenever(roleMapper.toModel(Role.REGULAR)).thenReturn(RoleModel.REGULAR)
+        whenever(roleMapper.toModel(Role.ADMIN)).thenReturn(RoleModel.ADMIN)
+        whenever(roleMapper.toModel(Role.MANAGER)).thenReturn(RoleModel.MANAGER)
     }
 
     @Test
@@ -38,6 +41,15 @@ class UserMapperTest {
         val userModel = UserModel(USER_ID, USER_EMAIL, USER_MODEL_ROLE, TOKEN)
         val userShouldBe = User(USER_ID, USER_EMAIL, USER_ROLE, TOKEN)
         val mappedUser = userMapper.from(userModel)
+
+        assertEquals(userShouldBe, mappedUser)
+    }
+
+    @Test
+    fun `maps entity to model`() {
+        val user = User(USER_ID, USER_EMAIL, USER_ROLE, TOKEN)
+        val userShouldBe = UserModel(USER_ID, USER_EMAIL, USER_MODEL_ROLE, TOKEN)
+        val mappedUser = userMapper.toModel(user)
 
         assertEquals(userShouldBe, mappedUser)
     }

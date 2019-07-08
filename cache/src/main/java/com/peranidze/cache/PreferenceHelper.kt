@@ -28,4 +28,8 @@ open class PreferenceHelper(context: Context) {
     var userRole: Role
         get() = Role.toRoleEnum(prefs.getString(PREFERENCE_USER_ROLE, null))
         set(value) = prefs.edit().putString(PREFERENCE_USER_ROLE, value.name).apply()
+
+    fun clear(){
+        prefs.edit().clear().apply()
+    }
 }

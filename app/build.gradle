@@ -50,7 +50,7 @@ dependencies {
     implementation appDependencies.navigationUi
     implementation appDependencies.glide
 
-    annotationProcessor appDependencies.glideCompiler
+    kapt appDependencies.glideCompiler
 
     testImplementation appTestDependencies.junit
     testImplementation appTestDependencies.koin

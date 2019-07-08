@@ -7,12 +7,12 @@ import com.peranidze.data.repository.TripRepository
 import com.peranidze.data.trip.model.Trip
 import io.reactivex.Single
 
-class GetTripUseCase(
+open class GetTripUseCase(
     private val tripRepository: TripRepository,
     executor: ThreadExecutor,
     postExecutionThread: PostExecutionThread
 ) : SingleUseCase<Trip, Long>(executor, postExecutionThread) {
 
-    override fun buildUseCase(params: Long): Single<Trip> = tripRepository.getTrip(params)
+    public override fun buildUseCase(params: Long): Single<Trip> = tripRepository.getTrip(params)
 
 }

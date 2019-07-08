@@ -32,4 +32,25 @@ class RoleMapperTest {
         val role = roleMapper.from(roleModel)
         assertEquals(role, Role.REGULAR)
     }
+
+    @Test
+    fun `maps admin role entity to admin model`() {
+        val role = Role.ADMIN
+        val roleModel = roleMapper.toModel(role)
+        assertEquals(roleModel, RoleModel.ADMIN)
+    }
+
+    @Test
+    fun `maps manager role entity to manager model`() {
+        val role = Role.MANAGER
+        val roleModel = roleMapper.toModel(role)
+        assertEquals(roleModel, RoleModel.MANAGER)
+    }
+
+    @Test
+    fun `maps regular role entity to regular model`() {
+        val role = Role.REGULAR
+        val roleModel = roleMapper.toModel(role)
+        assertEquals(roleModel, RoleModel.REGULAR)
+    }
 }

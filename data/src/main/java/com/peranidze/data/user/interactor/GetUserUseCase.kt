@@ -7,12 +7,12 @@ import com.peranidze.data.repository.UserRepository
 import com.peranidze.data.user.model.User
 import io.reactivex.Single
 
-class GetUserUseCase(
+open class GetUserUseCase(
     private val userRepository: UserRepository,
     executor: ThreadExecutor,
     postExecutionThread: PostExecutionThread
 ) : SingleUseCase<User, Long>(executor, postExecutionThread) {
 
-    override fun buildUseCase(params: Long): Single<User> = userRepository.getUser(params)
+    public override fun buildUseCase(params: Long): Single<User> = userRepository.getUser(params)
 
 }

@@ -20,12 +20,10 @@ class UserDataRepository(private val userDataStoreFactory: UserDataStoreFactory)
     override fun getUsers(): Single<List<User>> =
         userDataStoreFactory.getDataSource().getUsers()
 
-    override fun deleteUser(id: Long): Completable {
-        TODO("not implemented")
-    }
+    override fun deleteUser(id: Long): Completable =
+        userDataStoreFactory.getDataSource().deleteUser(id)
 
-    override fun updateUser(user: User): Completable {
-        TODO("not implemented")
-    }
+    override fun updateUser(user: User): Single<User> =
+        userDataStoreFactory.getDataSource().updateUser(user)
 
 }
