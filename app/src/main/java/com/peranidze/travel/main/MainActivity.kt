@@ -9,11 +9,14 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.peranidze.cache.PreferenceHelper
+import com.peranidze.data.user.model.Role
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseActivity
 import com.peranidze.travel.signin.SignInActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity() {
@@ -23,6 +26,7 @@ class MainActivity : BaseActivity() {
     }
 
     private val mainViewModel: MainViewModel by viewModel()
+    private val preferenceHelper: PreferenceHelper by inject()
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +35,7 @@ class MainActivity : BaseActivity() {
         setupDrawerNavigation()
         setupListener()
         observeLogoutLiveData()
+        handleUsersMenuItem()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -64,6 +69,10 @@ class MainActivity : BaseActivity() {
         })
     }
 
+    private fun handleUsersMenuItem() {
+        nav_view.menu.findItem(R.id.users_dest).isVisible = canManageUsers()
+    }
+
     private fun startLogin() {
         startActivity(SignInActivity.getIntent(this).apply {
             addFlags(
@@ -76,5 +85,7 @@ class MainActivity : BaseActivity() {
     private fun showError() {
         toast("Error")
     }
+
+    private fun canManageUsers() = preferenceHelper.userRole != Role.REGULAR
 
 }
