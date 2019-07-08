@@ -1,18 +1,18 @@
 package com.peranidze.travel.trip
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.peranidze.data.trip.model.Trip
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.extensions.toDateString
+import com.peranidze.travel.users.UsersState
 import com.peranidze.travel.views.DatePickerFragment
 import kotlinx.android.synthetic.main.fragment_trip.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,20 +29,35 @@ class TripFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
         setupListeners()
         observeTripLiveData()
 
         arguments?.let {
             with(TripFragmentArgs.fromBundle(it)) {
-                if (tripId > 0) {
-                    if (isForAdmin) {
-                        tripViewModel.fetchTripAndUsers(tripId)
-                    } else {
-                        tripViewModel.fetchTrip(tripId)
-                    }
+                if (isForAdmin && tripId > 0) {
+                    tripViewModel.fetchTripAndUsers(tripId)
+                } else if (isForAdmin) {
+                    tripViewModel.fetchUsers()
+                } else if (tripId > 0) {
+                    tripViewModel.fetchTrip(tripId)
+                } else {
+                    trip_group.visibility = VISIBLE
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.details_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_delete) {
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupListeners() {
@@ -94,30 +109,41 @@ class TripFragment : Fragment() {
     }
 
     private fun observeTripLiveData() {
-        tripViewModel.getTripLiveData().observe(this, androidx.lifecycle.Observer {
-            it.let {
+        tripViewModel.getTripLiveData().observe(this, Observer {
+            it?.let {
                 when (it) {
-                    is TripState.Loading -> handleTripLoading()
+                    is TripState.Loading -> handleLoading()
                     is TripState.Success -> handleTripSuccess(it.data)
                     is TripState.Error -> handleTripError(it.errorMessage)
                 }
             }
         })
 
-        tripViewModel.getTripAndUsersLiveData().observe(this, androidx.lifecycle.Observer {
-            it.let {
+        tripViewModel.getTripAndUsersLiveData().observe(this, Observer {
+            it?.let {
                 when (it) {
-                    is TripAndUsersState.Loading -> handleTripAndUsersLoading()
+                    is TripAndUsersState.Loading -> handleLoading()
                     is TripAndUsersState.Success -> handleTripAndUsersSuccess(it.data)
                     is TripAndUsersState.Error -> handleTripAndUsersError(it.errorMessage)
                 }
             }
         })
+
+        tripViewModel.getUsersLiveData().observe(this, Observer {
+            it?.let {
+                when (it) {
+                    is UsersState.Loading -> handleLoading()
+                    is UsersState.Success -> handleUsersSuccess(it.data)
+                    is UsersState.Error -> handleTripAndUsersError(it.errorMessage)
+                }
+            }
+        })
     }
 
-    private fun handleTripLoading() {
+    private fun handleLoading() {
         trip_progress.visibility = VISIBLE
         trip_group.visibility = GONE
+        trip_users_group.visibility = GONE
     }
 
     private fun handleTripSuccess(trip: Trip?) {
@@ -137,12 +163,6 @@ class TripFragment : Fragment() {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    private fun handleTripAndUsersLoading() {
-        trip_progress.visibility = VISIBLE
-        trip_group.visibility = GONE
-        trip_users_group.visibility = GONE
-    }
-
     private fun handleTripAndUsersSuccess(pair: Pair<Trip, List<User>>?) {
         trip_progress.visibility = GONE
         trip_group.visibility = VISIBLE
@@ -155,9 +175,11 @@ class TripFragment : Fragment() {
                 trip_comment_et.setText(comment)
             }
             with(pair.second) {
+                trip_users_group.visibility = VISIBLE
                 context?.let {
                     val arrayAdapter = UserAdapter(it, this)
                     trip_users_spinner.adapter = arrayAdapter
+                    trip_users_spinner.setSelection(1) //TODO set correct user for trip
                 }
             }
         }
@@ -168,5 +190,17 @@ class TripFragment : Fragment() {
         trip_group.visibility = VISIBLE
         trip_users_group.visibility = VISIBLE
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun handleUsersSuccess(users: List<User>?) {
+        trip_progress.visibility = GONE
+        trip_group.visibility = VISIBLE
+        trip_users_group.visibility = VISIBLE
+        users?.let {
+            context?.let {
+                val arrayAdapter = UserAdapter(it, users)
+                trip_users_spinner.adapter = arrayAdapter
+            }
+        }
     }
 }

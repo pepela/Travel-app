@@ -2,14 +2,10 @@ package com.peranidze.travel.signin.signup
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.user.interactor.SignUpUserUseCase
 import io.reactivex.disposables.CompositeDisposable
 
-class SignupViewModel(
-    private val signUpUserUseCase: SignUpUserUseCase,
-    private val preferenceHelper: PreferenceHelper
-) : ViewModel() {
+class SignUpViewModel(private val signUpUserUseCase: SignUpUserUseCase) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private val signUpLiveData: MutableLiveData<SignUpState> = MutableLiveData()
@@ -22,7 +18,6 @@ class SignupViewModel(
             signUpUserUseCase
                 .execute(SignUpUserUseCase.Params(email, password))
                 .subscribe({
-                    preferenceHelper.isUserLoggedIn = true
                     signUpLiveData.postValue(SignUpState.Success(it))
                 }, {
                     signUpLiveData.postValue(SignUpState.Error(it.message))

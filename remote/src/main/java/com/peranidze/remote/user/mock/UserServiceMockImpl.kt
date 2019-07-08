@@ -6,6 +6,7 @@ import com.peranidze.remote.user.model.UserModel
 import com.peranidze.remote.user.request.LogInRequestBody
 import com.peranidze.remote.user.request.SignUpRequestBody
 import io.reactivex.Single
+import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
 
 class UserServiceMockImpl : UserService {
@@ -13,7 +14,14 @@ class UserServiceMockImpl : UserService {
     override fun logIn(logInRequestBody: LogInRequestBody): Single<UserModel> =
         Single.timer(3, TimeUnit.SECONDS)
             .flatMap {
-                Single.just(UserModel(1, "mock@email.com", RoleModel.REGULAR, "TOKEN_IS_THIS_AND_NOTHING_ELSE"))
+                Single.just(
+                    UserModel(
+                        ThreadLocalRandom.current().nextInt(0, 1000 + 1).toLong(),
+                        logInRequestBody.login,
+                        if (logInRequestBody.login.toLowerCase().contains("admin")) RoleModel.ADMIN else RoleModel.REGULAR,
+                        "TOKEN_IS_THIS_AND_NOTHING_ELSE"
+                    )
+                )
             }
 
     override fun signUp(signUpRequestBody: SignUpRequestBody): Single<UserModel> =

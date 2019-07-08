@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseActivity
@@ -11,9 +12,12 @@ import com.peranidze.travel.main.MainActivity
 import com.peranidze.travel.signin.login.LoginFragment
 import com.peranidze.travel.signin.signup.SignUpFragment
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import org.koin.android.ext.android.inject
 
 class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionListener,
     SignUpFragment.OnSignUpFragmentInteractionListener {
+
+    private val preferenceHelper: PreferenceHelper by inject()
 
     companion object {
         fun getIntent(context: Context) = Intent(context, SignInActivity::class.java)
@@ -43,8 +47,8 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
     }
 
     override fun onLoggedIn(user: User) {
+        saveUser(user)
         startMain()
-        finish()
     }
 
     override fun onCreateAccountClicked() {
@@ -59,6 +63,7 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
     }
 
     override fun onSignedUp(user: User) {
+        saveUser(user)
         startMain()
     }
 
@@ -77,8 +82,14 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
         sign_in_progress.visibility = View.GONE
     }
 
+    private fun saveUser(user: User) {
+        preferenceHelper.isUserLoggedIn = true
+        preferenceHelper.userRole = user.role
+    }
+
     private fun startMain() {
         startActivity(MainActivity.getIntent(this))
+        finish()
     }
 
 }

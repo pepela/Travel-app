@@ -2,14 +2,10 @@ package com.peranidze.travel.signin.login
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.user.interactor.LogInUserUseCase
 import io.reactivex.disposables.Disposables
 
-class LoginViewModel(
-    private val logInUserUseCase: LogInUserUseCase,
-    private val preferenceHelper: PreferenceHelper
-) : ViewModel() {
+class LoginViewModel(private val logInUserUseCase: LogInUserUseCase) : ViewModel() {
 
     private var loginDisposable = Disposables.empty()
     private val loginLiveData: MutableLiveData<LoginState> = MutableLiveData()
@@ -22,12 +18,10 @@ class LoginViewModel(
         loginDisposable = logInUserUseCase
             .execute(LogInUserUseCase.Params(email, password))
             .subscribe({
-                preferenceHelper.isUserLoggedIn = true
                 loginLiveData.postValue(LoginState.Success(it))
             }, {
                 loginLiveData.postValue(LoginState.Error(it.message))
             })
-
     }
 
     override fun onCleared() {

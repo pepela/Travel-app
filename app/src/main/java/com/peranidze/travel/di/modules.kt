@@ -31,7 +31,7 @@ import com.peranidze.travel.UiThread
 import com.peranidze.travel.launcher.LauncherViewModel
 import com.peranidze.travel.main.MainViewModel
 import com.peranidze.travel.signin.login.LoginViewModel
-import com.peranidze.travel.signin.signup.SignupViewModel
+import com.peranidze.travel.signin.signup.SignUpViewModel
 import com.peranidze.travel.trip.TripViewModel
 import com.peranidze.travel.trips.TripsAdapter
 import com.peranidze.travel.trips.TripsViewModel
@@ -75,12 +75,12 @@ val launcherModule = module {
 
 val loginModule = module {
     single { LogInUserUseCase(get(), get(), get()) }
-    viewModel { LoginViewModel(get(), get()) }
+    viewModel { LoginViewModel(get()) }
 }
 
 val signUpModule = module {
     single { SignUpUserUseCase(get(), get(), get()) }
-    viewModel { SignupViewModel(get(), get()) }
+    viewModel { SignUpViewModel(get()) }
 }
 
 val usersModule = module {

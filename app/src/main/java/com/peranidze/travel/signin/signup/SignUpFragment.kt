@@ -30,7 +30,7 @@ class SignUpFragment : Fragment() {
         val TAG = SignUpFragment::class.java.name
     }
 
-    private val signUpViewModel: SignupViewModel by viewModel()
+    private val signUpViewModel: SignUpViewModel by viewModel()
     private lateinit var listener: OnSignUpFragmentInteractionListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =

@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.trip.model.Trip
+import com.peranidze.data.user.model.Role
 import com.peranidze.travel.R
 import com.peranidze.travel.extensions.hideSoftKeyboard
 import com.peranidze.travel.extensions.showSoftKeyboard
@@ -25,6 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TripsFragment : Fragment() {
 
     private val adapter: TripsAdapter by inject()
+    private val preferenceHelper: PreferenceHelper by inject()
     private val tripsViewModel: TripsViewModel by viewModel()
 
     private lateinit var adapterClickDisposable: Disposable
@@ -110,15 +113,17 @@ class TripsFragment : Fragment() {
 
     private fun setupAdapterClickListener() {
         adapterClickDisposable = adapter.clickSubject.subscribe {
-            val action = TripsFragmentDirections.actionTripsDestToTrip(it.id, Math.random() < 0.5)
-            findNavController().navigate(action)
+            findNavController().navigate(
+                TripsFragmentDirections.actionTripsDestToTrip(it.id, preferenceHelper.userRole == Role.ADMIN)
+            )
         }
     }
 
     private fun setupClickListeners() {
         add_trip_fab.setOnClickListener {
-            val action = TripsFragmentDirections.actionTripsDestToTrip(isForAdmin = Math.random() < 0.5)
-            findNavController().navigate(action)
+            findNavController().navigate(
+                TripsFragmentDirections.actionTripsDestToTrip(isForAdmin = preferenceHelper.userRole == Role.ADMIN)
+            )
         }
     }
 
