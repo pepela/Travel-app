@@ -18,4 +18,6 @@ interface UserDataStore {
 
     fun updateUser(user: User): Flowable<User>
 
+    fun createUser(user: User): Flowable<User>
+
 }

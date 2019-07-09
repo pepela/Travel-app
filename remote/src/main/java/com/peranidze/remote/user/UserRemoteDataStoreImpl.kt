@@ -3,6 +3,7 @@ package com.peranidze.remote.user
 import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.user.model.User
 import com.peranidze.remote.user.mapper.UserMapper
+import com.peranidze.remote.user.request.CreateUserRequestBody
 import com.peranidze.remote.user.request.LogInRequestBody
 import com.peranidze.remote.user.request.SignUpRequestBody
 import io.reactivex.Completable
@@ -44,9 +45,15 @@ class UserRemoteDataStoreImpl(
     override fun deleteUser(id: Long): Completable =
         userService.deleteUser(id)
 
-
     override fun updateUser(user: User): Flowable<User> =
         userService.updateUser(user.id, userMapper.toModel(user))
+            .map {
+                userMapper.from(it)
+            }
+            .toFlowable()
+
+    override fun createUser(user: User): Flowable<User> =
+        userService.createUser(CreateUserRequestBody(user.email, user.password!!))
             .map {
                 userMapper.from(it)
             }

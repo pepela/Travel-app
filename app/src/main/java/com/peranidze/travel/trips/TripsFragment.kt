@@ -3,8 +3,6 @@ package com.peranidze.travel.trips
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
@@ -17,6 +15,8 @@ import com.peranidze.data.user.model.Role
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
 import com.peranidze.travel.extensions.hideSoftKeyboard
+import com.peranidze.travel.extensions.makeGone
+import com.peranidze.travel.extensions.makeVisible
 import com.peranidze.travel.extensions.showSoftKeyboard
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_trips.*
@@ -139,26 +139,26 @@ class TripsFragment : BaseFragment() {
     }
 
     private fun handleLoading() {
-        trips_progress.visibility = VISIBLE
-        trips_rv.visibility = GONE
-        trips_empty_tv.visibility = GONE
+        trips_progress.makeVisible()
+        trips_rv.makeGone()
+        trips_empty_tv.makeGone()
     }
 
     private fun handleSuccess(trips: List<Trip>?) {
-        trips_progress.visibility = GONE
+        trips_progress.makeGone()
         if (trips.isNullOrEmpty()) {
-            trips_empty_tv.visibility = VISIBLE
+            trips_empty_tv.makeVisible()
         } else {
-            trips_empty_tv.visibility = GONE
-            trips_rv.visibility = VISIBLE
+            trips_empty_tv.makeGone()
+            trips_rv.makeVisible()
             adapter.allTrips = trips
         }
     }
 
     private fun handleError(message: String?) {
-        trips_progress.visibility = GONE
-        trips_empty_tv.visibility = VISIBLE
-        trips_rv.visibility = GONE
+        trips_progress.makeGone()
+        trips_empty_tv.makeVisible()
+        trips_rv.makeGone()
         showErrorMessage(message)
     }
 }

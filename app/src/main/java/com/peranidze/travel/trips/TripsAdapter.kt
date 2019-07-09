@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.peranidze.data.trip.model.Trip
 import com.peranidze.travel.R
+import com.peranidze.travel.extensions.makeGone
+import com.peranidze.travel.extensions.makeVisible
 import com.peranidze.travel.extensions.toDateString
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -38,10 +40,10 @@ class TripsAdapter : RecyclerView.Adapter<TripsAdapter.ViewHolder>() {
     }
 
     fun filterTrips(destination: String?) {
-        if (destination.isNullOrEmpty()) {
-            trips = allTrips
+        trips = if (destination.isNullOrEmpty()) {
+            allTrips
         } else {
-            trips = allTrips.filter { it.destination.contains(destination) }
+            allTrips.filter { it.destination.contains(destination) }
         }
     }
 
@@ -55,10 +57,15 @@ class TripsAdapter : RecyclerView.Adapter<TripsAdapter.ViewHolder>() {
 
                 val daysLeftTv: TextView = findViewById(R.id.trip_days_left_tv)
                 if (isTripInFuture(trip)) {
-                    daysLeftTv.visibility = View.VISIBLE
-                    daysLeftTv.text = calculateDaysLeftTill(trip).toString()
+                    daysLeftTv.makeGone()
+                    with(calculateDaysLeftTill(trip)) {
+                        daysLeftTv.text = context.resources
+                            .getQuantityString(
+                                R.plurals.number_of_days_left, this, this
+                            )
+                    }
                 } else {
-                    daysLeftTv.visibility = View.GONE
+                    daysLeftTv.makeVisible()
                 }
 
                 setOnClickListener {
@@ -84,11 +91,11 @@ class TripsAdapter : RecyclerView.Adapter<TripsAdapter.ViewHolder>() {
 
         private fun isTripInFuture(trip: Trip) = trip.startDate.after(Date())
 
-        private fun calculateDaysLeftTill(trip: Trip): Long {
+        private fun calculateDaysLeftTill(trip: Trip): Int {
             if (!isTripInFuture(trip)) {
                 return 0
             }
-            return TimeUnit.DAYS.convert(trip.startDate.time - Date().time, TimeUnit.MILLISECONDS)
+            return TimeUnit.DAYS.convert(trip.startDate.time - Date().time, TimeUnit.MILLISECONDS).toInt()
         }
 
     }

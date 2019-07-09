@@ -25,6 +25,10 @@
     <string name="title_trip_destination">Destination</string>
     <string name="title_trip_comment">Comment</string>
 
+    <string name="err_empty_destination">Destination can\'t be empty</string>
+    <string name="err_empty_start_date">Please pick trip start date</string>
+    <string name="err_empty_end_date">Please pick trip end date</string>
+
 
     <!-- Sign up -->
     <string name="action_log_in">Log in</string>
@@ -58,4 +62,8 @@
     <!-- trips -->
     <string name="action_search">Search</string>
     <string name="content_description_destination">Destination</string>
+    <plurals name="number_of_days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
 </resources>

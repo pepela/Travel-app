@@ -2,29 +2,64 @@ package com.peranidze.travel.user
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.peranidze.data.user.interactor.DeleteUserUseCase
 import com.peranidze.data.user.interactor.GetUserUseCase
-import io.reactivex.disposables.Disposables
+import com.peranidze.data.user.interactor.UpdateUserUseCase
+import com.peranidze.data.user.model.User
+import io.reactivex.disposables.CompositeDisposable
 
-class UserViewModel(private val getUserUseCase: GetUserUseCase) : ViewModel() {
+class UserViewModel(
+    private val getUserUseCase: GetUserUseCase,
+    private val updateUserUseCase: UpdateUserUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase
+) : ViewModel() {
 
-    private var getUserDisposable = Disposables.empty()
-    private val getUserLiveData = MutableLiveData<UserState>()
+    private val disposables = CompositeDisposable()
+    private val userLiveData = MutableLiveData<UserState>()
 
-    fun getUserLiveData() = getUserLiveData
+    fun getUserLiveData() = userLiveData
 
     fun fetchUser(id: Long) {
-        getUserDisposable.dispose()
-        getUserLiveData.postValue(UserState.Loading)
-        getUserDisposable = getUserUseCase.execute(id)
-            .subscribe({
-                getUserLiveData.postValue(UserState.Success(it))
-            }, {
-                getUserLiveData.postValue(UserState.Error(it.message))
-            })
+        disposables.dispose()
+        userLiveData.postValue(UserState.Loading)
+        disposables.add(
+            getUserUseCase.execute(id)
+                .subscribe({
+                    userLiveData.postValue(UserState.Success(it))
+                }, {
+                    userLiveData.postValue(UserState.Error(it.message))
+                })
+        )
+    }
+
+    fun updateUser(user: User) {
+        disposables.dispose()
+        userLiveData.postValue(UserState.Loading)
+        disposables.add(
+            updateUserUseCase.execute(user)
+                .subscribe({
+                    userLiveData.postValue(UserState.Success(it))
+                }, {
+                    userLiveData.postValue(UserState.Error(it.message))
+                })
+        )
+    }
+
+    fun deleteUser(id: Long) {
+        disposables.dispose()
+        userLiveData.postValue(UserState.Loading)
+        disposables.add(
+            deleteUserUseCase.execute(id)
+                .subscribe({
+                    userLiveData.postValue(UserState.Success())
+                }, {
+                    userLiveData.postValue(UserState.Error(it.message))
+                })
+        )
     }
 
     override fun onCleared() {
         super.onCleared()
-        getUserDisposable.dispose()
+        disposables.dispose()
     }
 }

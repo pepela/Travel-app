@@ -2,15 +2,15 @@ package com.peranidze.travel.user
 
 import android.os.Bundle
 import android.view.*
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.peranidze.data.user.model.Role
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
+import com.peranidze.travel.extensions.makeGone
+import com.peranidze.travel.extensions.makeVisible
 import kotlinx.android.synthetic.main.fragment_user.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,11 +26,9 @@ class UserFragment : BaseFragment() {
         setHasOptionsMenu(true)
         observeUserLiveData()
 
-        arguments?.let {
-            with(UserFragmentArgs.fromBundle(it)) {
-                if (userId > 0) {
-                    userViewModel.fetchUser(userId)
-                }
+        with(getUserId()) {
+            if (this > 0) {
+                userViewModel.fetchUser(this)
             }
         }
     }
@@ -40,12 +38,30 @@ class UserFragment : BaseFragment() {
         inflater.inflate(R.menu.details_menu, menu)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.findItem(R.id.action_delete)?.isVisible = getUserId() > 0
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.action_delete) {
-            return true
+            with(getUserId()) {
+                if (this > 0) {
+                    userViewModel.deleteUser(this)
+                    return true
+                }
+            }
+            return false
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun getUserId(): Long =
+        arguments?.let {
+            with(UserFragmentArgs.fromBundle(it)) {
+                userId
+            }
+        } ?: -1
 
     private fun observeUserLiveData() {
         userViewModel.getUserLiveData().observe(this, Observer {
@@ -64,7 +80,9 @@ class UserFragment : BaseFragment() {
     }
 
     private fun handleSuccess(user: User?) {
-        user?.let {
+        if (user == null) {
+            findNavController().popBackStack()
+        } else {
             user_email_et.setText(user.email)
 
             arguments?.let { bundle ->
@@ -77,10 +95,10 @@ class UserFragment : BaseFragment() {
                             listOf("REGULAR", "MANAGER", "ADMIN")
                         )
                     } else {
-                        showRoleTextView(it.role)
+                        showRoleTextView(user.role)
                     }
                 }
-            } ?: showRoleTextView(it.role)
+            } ?: showRoleTextView(user.role)
         }
     }
 
@@ -89,8 +107,8 @@ class UserFragment : BaseFragment() {
     }
 
     private fun showRoleTextView(role: Role) {
-        user_roles_spinner.visibility = GONE
-        user_role_tv.visibility = VISIBLE
+        user_roles_spinner.makeGone()
+        user_role_tv.makeVisible()
         user_role_tv.text = role.toString()
     }
 }

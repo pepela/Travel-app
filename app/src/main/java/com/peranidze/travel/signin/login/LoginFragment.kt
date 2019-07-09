@@ -11,6 +11,7 @@ import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
 import com.peranidze.travel.extensions.isEmail
+import com.peranidze.travel.extensions.validate
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -67,29 +68,20 @@ class LoginFragment : BaseFragment() {
         }
 
         login_btn.setOnClickListener {
-            val email = login_email_et.text.toString()
-            val password = login_password_et.text.toString()
-            if (areFieldsCorrect(email, password)) {
-                login(email, password)
-            } else {
-                showFieldErrors(login_email_et, login_password_et)
-            }
+            tryLogin(login_email_et, login_password_et)
         }
     }
 
-    private fun areFieldsCorrect(email: String, password: String) =
-        email.isEmail() && password.isNotEmpty()
-
-    private fun showFieldErrors(emailView: EditText, passwordView: EditText) {
+    private fun tryLogin(emailView: EditText, passwordView: EditText) {
         val email = emailView.text.toString()
         val password = passwordView.text.toString()
 
-        if (email.isEmpty()) {
-            emailView.error = getString(R.string.err_empty_email)
-        } else if (!email.isEmail()) {
-            emailView.error = getString(R.string.err_incorrect_email)
-        } else if (password.isEmpty()) {
-            passwordView.error = getString(R.string.err_empty_password)
+        if (emailView.validate({ email.isNotEmpty() }, R.string.err_empty_email)) {
+            if (emailView.validate({ email.isEmail() }, R.string.err_incorrect_email)) {
+                if (passwordView.validate({ password.isNotEmpty() }, R.string.err_empty_password)) {
+                    login(email, password)
+                }
+            }
         }
     }
 

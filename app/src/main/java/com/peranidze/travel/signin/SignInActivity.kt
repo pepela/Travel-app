@@ -3,11 +3,12 @@ package com.peranidze.travel.signin
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseActivity
+import com.peranidze.travel.extensions.makeGone
+import com.peranidze.travel.extensions.makeVisible
 import com.peranidze.travel.main.MainActivity
 import com.peranidze.travel.signin.login.LoginFragment
 import com.peranidze.travel.signin.signup.SignUpFragment
@@ -75,11 +76,11 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
     }
 
     private fun showLoading() {
-        sign_in_progress.visibility = View.VISIBLE
+        sign_in_progress.makeVisible()
     }
 
     private fun hideLoading() {
-        sign_in_progress.visibility = View.GONE
+        sign_in_progress.makeGone()
     }
 
     private fun saveUser(user: User) {

@@ -3,6 +3,7 @@ package com.peranidze.remote.user.mock
 import com.peranidze.remote.user.UserService
 import com.peranidze.remote.user.model.RoleModel
 import com.peranidze.remote.user.model.UserModel
+import com.peranidze.remote.user.request.CreateUserRequestBody
 import com.peranidze.remote.user.request.LogInRequestBody
 import com.peranidze.remote.user.request.SignUpRequestBody
 import io.reactivex.Completable
@@ -44,4 +45,6 @@ class UserServiceMockImpl : UserService {
     override fun deleteUser(id: Long): Completable =
         Completable.complete()
 
+    override fun createUser(createUserRequestBody: CreateUserRequestBody): Single<UserModel> =
+        Single.timer(2, TimeUnit.SECONDS).flatMap { Single.just(users[0]) }
 }

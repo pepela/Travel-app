@@ -11,6 +11,7 @@ import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
 import com.peranidze.travel.extensions.isEmail
+import com.peranidze.travel.extensions.validate
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -62,39 +63,27 @@ class SignUpFragment : BaseFragment() {
 
     private fun setUpListener() {
         sign_up_btn.setOnClickListener {
-            val email = sign_up_email_et.text.toString()
-            val password = sign_up_password_et.text.toString()
-            val repeatPassword = sign_up_repeat_password_et.text.toString()
-
-            if (areFieldsCorrect(email, password, repeatPassword)) {
-                signUpViewModel.doSignUp(email, password)
-            } else {
-
-            }
-            showFieldErrors(sign_up_email_et, sign_up_password_et, sign_up_repeat_password_et)
+            trySignUp(sign_up_email_et, sign_up_password_et, sign_up_repeat_password_et)
         }
     }
 
-    private fun areFieldsCorrect(email: String, password: String, repeatPassword: String) =
-        email.isEmail() && isPasswordCorrect(password) && doPasswordsMatch(password, repeatPassword)
-
-    private fun showFieldErrors(emailView: EditText, passwordView: EditText, repeatPasswordView: EditText) {
+    private fun trySignUp(emailView: EditText, passwordView: EditText, repeatPasswordView: EditText) {
         val email = emailView.text.toString()
         val password = passwordView.text.toString()
         val repeatPassword = repeatPasswordView.text.toString()
 
-        if (email.isEmpty()) {
-            emailView.error = getString(R.string.err_empty_email)
-        } else if (!email.isEmail()) {
-            emailView.error = getString(R.string.err_incorrect_email)
-        } else if (password.isEmpty()) {
-            passwordView.error = getString(R.string.err_empty_password)
-        } else if (!isPasswordCorrect(password)) {
-            passwordView.error = getString(R.string.err_incorrect_password)
-        } else if (repeatPassword.isEmpty()) {
-            repeatPasswordView.error = getString(R.string.err_empty_repeat_password)
-        } else if (!doPasswordsMatch(password, repeatPassword)) {
-            repeatPasswordView.error = getString(R.string.err_passwords_do_not_match)
+        if (emailView.validate({ email.isNotEmpty() }, R.string.err_empty_email)) {
+            if (emailView.validate({ email.isEmail() }, R.string.err_incorrect_email)) {
+                if (passwordView.validate({ password.isNotEmpty() }, R.string.err_empty_password)) {
+                    if (passwordView.validate({ isPasswordCorrect(password) }, R.string.err_incorrect_password)) {
+                        if (repeatPasswordView.validate({ repeatPassword.isNotEmpty() }, R.string.err_empty_repeat_password)) {
+                            if (repeatPasswordView.validate({ doPasswordsMatch(password, repeatPassword) }, R.string.err_passwords_do_not_match)) {
+                                signUpViewModel.doSignUp(email, password)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -12,12 +12,11 @@ import com.peranidze.data.source.trip.TripDataStore
 import com.peranidze.data.source.trip.TripDataStoreFactory
 import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.source.user.UserDataStoreFactory
+import com.peranidze.data.trip.interactor.DeleteTripUseCase
 import com.peranidze.data.trip.interactor.GetTripUseCase
 import com.peranidze.data.trip.interactor.GetTripsUseCase
-import com.peranidze.data.user.interactor.GetUserUseCase
-import com.peranidze.data.user.interactor.GetUsersUseCase
-import com.peranidze.data.user.interactor.LogInUserUseCase
-import com.peranidze.data.user.interactor.SignUpUserUseCase
+import com.peranidze.data.trip.interactor.UpdateTripUseCase
+import com.peranidze.data.user.interactor.*
 import com.peranidze.remote.trip.TripRemoteDataStoreImpl
 import com.peranidze.remote.trip.TripService
 import com.peranidze.remote.trip.mapper.TripMapper
@@ -91,7 +90,9 @@ val usersModule = module {
 
 val userModule = module {
     single { GetUserUseCase(get(), get(), get()) }
-    viewModel { UserViewModel(get()) }
+    single { UpdateUserUseCase(get(), get(), get()) }
+    single { DeleteUserUseCase(get(), get(), get()) }
+    viewModel { UserViewModel(get(), get(), get()) }
 }
 
 val tripsModule = module {
@@ -102,7 +103,9 @@ val tripsModule = module {
 
 val tripModule = module {
     single { GetTripUseCase(get(), get(), get()) }
-    viewModel { TripViewModel(get(), get()) }
+    single { UpdateTripUseCase(get(), get(), get()) }
+    single { DeleteTripUseCase(get(), get(), get()) }
+    viewModel { TripViewModel(get(), get(), get(), get()) }
 }
 
 val mainModule = module {

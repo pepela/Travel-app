@@ -28,6 +28,7 @@
                 android:id="@+id/trip_from_tv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
                 android:layout_marginTop="@dimen/recycler_view_item_vertical_margin"
                 android:ellipsize="end"
                 android:lines="1"
@@ -47,7 +48,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/trip_iv"
                 app:layout_constraintStart_toEndOf="@+id/trip_from_tv"
-                tools:text="3 day"/>
+                tools:text="3 days left"/>
 
         <TextView
                 android:id="@+id/trip_date_start_tv"

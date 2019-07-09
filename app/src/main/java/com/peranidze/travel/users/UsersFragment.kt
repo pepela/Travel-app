@@ -3,8 +3,6 @@ package com.peranidze.travel.users
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -14,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
+import com.peranidze.travel.extensions.makeGone
+import com.peranidze.travel.extensions.makeVisible
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_users.*
 import org.koin.android.ext.android.inject
@@ -77,26 +77,26 @@ class UsersFragment : BaseFragment() {
     }
 
     private fun handleLoading() {
-        users_progress.visibility = VISIBLE
-        users_rv.visibility = GONE
-        users_empty_tv.visibility = GONE
+        users_progress.makeVisible()
+        users_rv.makeGone()
+        users_empty_tv.makeGone()
     }
 
     private fun handleSuccess(users: List<User>?) {
-        users_progress.visibility = GONE
+        users_progress.makeGone()
         if (users.isNullOrEmpty()) {
-            users_empty_tv.visibility = VISIBLE
+            users_empty_tv.makeVisible()
         } else {
-            users_empty_tv.visibility = GONE
-            users_rv.visibility = VISIBLE
+            users_empty_tv.makeGone()
+            users_rv.makeVisible()
             adapter.users = users
         }
     }
 
     private fun handleError(message: String?) {
-        users_progress.visibility = GONE
-        users_empty_tv.visibility = VISIBLE
-        users_rv.visibility = GONE
+        users_progress.makeGone()
+        users_empty_tv.makeVisible()
+        users_rv.makeGone()
         showErrorMessage(message)
     }
 }
