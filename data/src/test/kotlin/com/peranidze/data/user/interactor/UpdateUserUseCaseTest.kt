@@ -5,26 +5,27 @@ import com.nhaarman.mockito_kotlin.verify
 import com.peranidze.data.executor.PostExecutionThread
 import com.peranidze.data.executor.ThreadExecutor
 import com.peranidze.data.repository.UserRepository
+import com.peranidze.data.test.factory.UserFactory
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class GetUserUseCaseTest {
+class UpdateUserUseCaseTest {
     companion object {
-        private const val USER_ID = 1L
+        private val USER = UserFactory.makeUser()
     }
 
     private val userRepository = mock<UserRepository>()
     private val threadExecutor = mock<ThreadExecutor>()
     private val postExecutionThread = mock<PostExecutionThread>()
 
-    private val getUserUseCase = GetUserUseCase(userRepository, threadExecutor, postExecutionThread)
+    private val updateUserUseCase = UpdateUserUseCase(userRepository, threadExecutor, postExecutionThread)
 
     @Test
-    fun `getUserUseCase calls repository`() {
-        getUserUseCase.buildUseCase(USER_ID)
+    fun `updateUserUseCase calls repository`() {
+        updateUserUseCase.buildUseCase(USER)
 
-        verify(userRepository).getUser(USER_ID)
+        verify(userRepository).updateUser(USER)
     }
 }

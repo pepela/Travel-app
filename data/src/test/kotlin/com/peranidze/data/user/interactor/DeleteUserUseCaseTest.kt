@@ -5,26 +5,27 @@ import com.nhaarman.mockito_kotlin.verify
 import com.peranidze.data.executor.PostExecutionThread
 import com.peranidze.data.executor.ThreadExecutor
 import com.peranidze.data.repository.UserRepository
+import com.peranidze.data.test.factory.DataFactory.Factory.randomLong
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class GetUserUseCaseTest {
+class DeleteUserUseCaseTest {
     companion object {
-        private const val USER_ID = 1L
+        private val USER_ID = randomLong()
     }
 
     private val userRepository = mock<UserRepository>()
     private val threadExecutor = mock<ThreadExecutor>()
     private val postExecutionThread = mock<PostExecutionThread>()
 
-    private val getUserUseCase = GetUserUseCase(userRepository, threadExecutor, postExecutionThread)
+    private val deleteUserUseCase = DeleteUserUseCase(userRepository, threadExecutor, postExecutionThread)
 
     @Test
-    fun `getUserUseCase calls repository`() {
-        getUserUseCase.buildUseCase(USER_ID)
+    fun `deleteUserUseCase calls repository`() {
+        deleteUserUseCase.buildUseCase(USER_ID)
 
-        verify(userRepository).getUser(USER_ID)
+        verify(userRepository).deleteUser(USER_ID)
     }
 }

@@ -19,7 +19,7 @@ class GetUsersUseCaseTest {
     private val getUsersUseCase = GetUsersUseCase(userRepository, threadExecutor, postExecutionThread)
 
     @Test
-    fun `getTripsUseCase calls repository`() {
+    fun `getUsersUseCase calls repository`() {
         getUsersUseCase.buildUseCase()
 
         verify(userRepository).getUsers()

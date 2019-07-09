@@ -5,14 +5,14 @@ import com.peranidze.data.executor.ThreadExecutor
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 
-abstract class CompletableUseCase<T, in Params> constructor(
+abstract class CompletableUseCase<in Params> constructor(
     private val threadExecutor: ThreadExecutor,
     private val postExecutionThread: PostExecutionThread
 ) {
 
-    protected abstract fun buildUseCase(params: Params? = null): Completable
+    protected abstract fun buildUseCase(params: Params): Completable
 
-    open fun execute(params: Params? = null): Completable =
+    open fun execute(params: Params): Completable =
         buildUseCase(params)
             .subscribeOn(Schedulers.from(threadExecutor))
             .observeOn(postExecutionThread.scheduler)
