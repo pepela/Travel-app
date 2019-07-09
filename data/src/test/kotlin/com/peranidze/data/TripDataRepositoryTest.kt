@@ -7,7 +7,7 @@ import com.peranidze.data.source.trip.TripDataStore
 import com.peranidze.data.source.trip.TripDataStoreFactory
 import com.peranidze.data.test.factory.TripFactory
 import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Flowable
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -30,10 +30,10 @@ class TripDataRepositoryTest {
     @Before
     fun setup() {
         whenever(tripDataStoreFactory.getDataSource()).thenReturn(remoteDataStore)
-        whenever(remoteDataStore.getTrip(any())).thenReturn(Single.just(TRIP))
-        whenever(remoteDataStore.getTripsFor(any())).thenReturn(Single.just(TRIPS))
+        whenever(remoteDataStore.getTrip(any())).thenReturn(Flowable.just(TRIP))
+        whenever(remoteDataStore.getTripsFor(any())).thenReturn(Flowable.just(TRIPS))
+        whenever(remoteDataStore.updateTrip(any())).thenReturn(Flowable.just(TRIP))
         whenever(remoteDataStore.deleteTrip(any())).thenReturn(Completable.complete())
-        whenever(remoteDataStore.updateTrip(any())).thenReturn(Single.just(TRIP))
     }
 
     @Test

@@ -7,7 +7,7 @@ import com.peranidze.data.trip.model.Trip
 import com.peranidze.data.user.interactor.GetUsersUseCase
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.users.UsersState
-import io.reactivex.Single
+import io.reactivex.Flowable
 import io.reactivex.disposables.Disposables
 import io.reactivex.functions.BiFunction
 
@@ -39,7 +39,7 @@ class TripViewModel(
     fun fetchTripAndUsers(id: Long) {
         disposable.dispose()
         tripAndUsersLiveData.postValue(TripAndUsersState.Loading)
-        disposable = Single.zip(
+        disposable = Flowable.zip(
             getTripUseCase.execute(id),
             getUsersUseCase.execute(),
             BiFunction { trip: Trip, users: List<User> -> Pair(trip, users) })

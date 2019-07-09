@@ -7,6 +7,7 @@ import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.source.user.UserDataStoreFactory
 import com.peranidze.data.test.factory.UserFactory
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
@@ -32,11 +33,11 @@ class UserDataRepositoryTest {
     @Before
     fun setup() {
         whenever(userDataStoreFactory.getDataSource()).thenReturn(remoteDataStore)
-        whenever(remoteDataStore.logInUser(any(), any())).thenReturn(Single.just(USER))
-        whenever(remoteDataStore.signUpUser(any(), any())).thenReturn(Single.just(USER))
-        whenever(remoteDataStore.getUsers()).thenReturn(Single.just(USERS))
-        whenever(remoteDataStore.getUser(any())).thenReturn(Single.just(USER))
-        whenever(remoteDataStore.updateUser(any())).thenReturn(Single.just(USER))
+        whenever(remoteDataStore.logInUser(any(), any())).thenReturn(Flowable.just(USER))
+        whenever(remoteDataStore.signUpUser(any(), any())).thenReturn(Flowable.just(USER))
+        whenever(remoteDataStore.getUsers()).thenReturn(Flowable.just(USERS))
+        whenever(remoteDataStore.getUser(any())).thenReturn(Flowable.just(USER))
+        whenever(remoteDataStore.updateUser(any())).thenReturn(Flowable.just(USER))
         whenever(remoteDataStore.deleteUser(any())).thenReturn(Completable.complete())
     }
 

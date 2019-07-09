@@ -2,15 +2,15 @@ package com.peranidze.data.source.trip
 
 import com.peranidze.data.trip.model.Trip
 import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 interface TripDataStore {
 
-    fun getTrip(id: Long): Single<Trip>
+    fun getTrip(id: Long): Flowable<Trip>
 
-    fun getTripsFor(userId: Long): Single<List<Trip>>
+    fun getTripsFor(userId: Long): Flowable<List<Trip>>
 
-    fun updateTrip(trip: Trip): Single<Trip>
+    fun updateTrip(trip: Trip): Flowable<Trip>
 
     fun deleteTrip(id: Long): Completable
 }

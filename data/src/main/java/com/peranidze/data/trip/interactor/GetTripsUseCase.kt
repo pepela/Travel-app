@@ -2,18 +2,17 @@ package com.peranidze.data.trip.interactor
 
 import com.peranidze.data.executor.PostExecutionThread
 import com.peranidze.data.executor.ThreadExecutor
-import com.peranidze.data.interpretator.SingleUseCase
+import com.peranidze.data.interpretator.FlowableUseCase
 import com.peranidze.data.repository.TripRepository
 import com.peranidze.data.trip.model.Trip
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 open class GetTripsUseCase(
     private val tripRepository: TripRepository,
     executor: ThreadExecutor,
     postExecutionThread: PostExecutionThread
-) : SingleUseCase<List<Trip>, Long>(executor, postExecutionThread) {
+) : FlowableUseCase<List<Trip>, Long>(executor, postExecutionThread) {
 
-    public override fun buildUseCase(params: Long): Single<List<Trip>> =
-        tripRepository.getTripsFor(params)
+    public override fun buildUseCase(params: Long): Flowable<List<Trip>> = tripRepository.getTripsFor(params)
 
 }

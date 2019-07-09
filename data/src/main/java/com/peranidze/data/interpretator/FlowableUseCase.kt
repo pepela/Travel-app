@@ -10,9 +10,9 @@ abstract class FlowableUseCase<T, in Params> constructor(
     private val postExecutionThread: PostExecutionThread
 ) {
 
-    protected abstract fun buildUseCase(params: Params? = null): Flowable<T>
+    protected abstract fun buildUseCase(params: Params): Flowable<T>
 
-    open fun execute(params: Params? = null): Flowable<T> =
+    open fun execute(params: Params): Flowable<T> =
         buildUseCase(params)
             .subscribeOn(Schedulers.from(threadExecutor))
             .observeOn(postExecutionThread.scheduler)

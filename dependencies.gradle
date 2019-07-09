@@ -78,6 +78,7 @@ ext {
 
     remoteDependencies = [
             gson:                "com.google.code.gson:gson:${gsonVersion}",
+            rxJava:              "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
             rxKotlin:            "io.reactivex.rxjava2:rxkotlin:${rxKotlinVersion}",
             kotlin:              "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}",
             okHttp:              "com.squareup.okhttp3:okhttp:${okHttpVersion}",

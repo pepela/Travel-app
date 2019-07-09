@@ -2,20 +2,20 @@ package com.peranidze.data.repository
 
 import com.peranidze.data.user.model.User
 import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.Flowable
 
 interface UserRepository {
 
-    fun logInUser(email: String, password: String): Single<User>
+    fun logInUser(email: String, password: String): Flowable<User>
 
-    fun signUpUser(email: String, password: String): Single<User>
+    fun signUpUser(email: String, password: String): Flowable<User>
 
-    fun getUser(id: Long): Single<User>
+    fun getUser(id: Long): Flowable<User>
 
-    fun getUsers(): Single<List<User>>
+    fun getUsers(): Flowable<List<User>>
 
     fun deleteUser(id: Long): Completable
 
-    fun updateUser(user: User): Single<User>
+    fun updateUser(user: User): Flowable<User>
 
 }
