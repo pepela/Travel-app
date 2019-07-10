@@ -29,6 +29,10 @@
     <string name="err_empty_start_date">Please pick trip start date</string>
     <string name="err_empty_end_date">Please pick trip end date</string>
 
+    <string name="msg_trip_update_success">Trip was updated</string>
+    <string name="msg_trip_create_success">Trip was created</string>
+    <string name="msg_trip_delete_success">Trip was deleted</string>
+
 
     <!-- Sign up -->
     <string name="action_log_in">Log in</string>

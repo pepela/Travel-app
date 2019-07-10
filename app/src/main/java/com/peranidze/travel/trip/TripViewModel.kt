@@ -30,11 +30,15 @@ class TripViewModel(
     private var tripAndUsersLiveData: MutableLiveData<TripAndUsersState> = MutableLiveData()
     private var usersLiveData: MutableLiveData<UsersState> = MutableLiveData()
     private var createTripLiveData: MutableLiveData<TripState> = MutableLiveData()
+    private var updateTripLiveData: MutableLiveData<TripState> = MutableLiveData()
+    private var deleteTripLiveData: MutableLiveData<TripState> = MutableLiveData()
 
     fun getTripLiveData() = tripLiveData
     fun getTripAndUsersLiveData() = tripAndUsersLiveData
     fun getUsersLiveData() = usersLiveData
     fun getCreateTripLiveData() = createTripLiveData
+    fun getUpdateTripLiveData() = updateTripLiveData
+    fun deleteUpdateTripLiveData() = deleteTripLiveData
 
     fun fetchTrip(id: Long) {
         tripLiveData.postValue(TripState.Loading)
@@ -76,25 +80,25 @@ class TripViewModel(
     }
 
     fun deleteTrip(id: Long) {
-        usersLiveData.postValue(UsersState.Loading)
+        deleteTripLiveData.postValue(TripState.Loading)
         disposables.add(
             deleteTripUseCase.execute(id)
                 .subscribe({
-
+                    deleteTripLiveData.postValue(TripState.Success())
                 }, {
-
+                    deleteTripLiveData.postValue(TripState.Error(it.message))
                 })
         )
     }
 
     fun updateTrip(trip: Trip) {
-        usersLiveData.postValue(UsersState.Loading)
+        updateTripLiveData.postValue(TripState.Loading)
         disposables.add(
             updateTripUseCase.execute(trip)
                 .subscribe({
-
+                    updateTripLiveData.postValue(TripState.Success(it))
                 }, {
-
+                    updateTripLiveData.postValue(TripState.Error(it.message))
                 })
         )
     }

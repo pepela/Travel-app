@@ -82,6 +82,10 @@ class TripFragment : BaseFragment() {
 
     private fun isNewTrip(): Boolean = getTripId() <= 0
 
+    private fun getDestination(): String = trip_destination_et.text.toString()
+
+    private fun getComment(): String = trip_comment_et.text.toString()
+
     private fun setupListeners() {
         setupSaveButtonClickListener()
         setupStartDateClickListener()
@@ -101,15 +105,23 @@ class TripFragment : BaseFragment() {
                     } else {
                         tripViewModel.createTrip(
                             null,
-                            trip_destination_et.text.toString(),
+                            getDestination(),
                             tripStartDate!!,
                             tripEndDate!!,
-                            trip_comment_et.text.toString()
+                            getComment()
                         )
                     }
                 } else {
-                    // TODO update
-                    //tripViewModel.updateTrip(Trip())
+                    // Update user too
+                    tripViewModel.updateTrip(
+                        Trip(
+                            getTripId(),
+                            getDestination(),
+                            tripStartDate!!,
+                            tripEndDate!!,
+                            getComment()
+                        )
+                    )
                 }
             }
         }
@@ -190,7 +202,33 @@ class TripFragment : BaseFragment() {
                     is TripState.Loading -> handleLoading()
                     is TripState.Success -> {
                         handleTripSuccess(it.data)
-                        Toast.makeText(context, "Trip was created", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, R.string.msg_trip_create_success, Toast.LENGTH_LONG).show()
+                    }
+                    is TripState.Error -> handleTripError(it.errorMessage)
+                }
+            }
+        })
+
+        tripViewModel.getUpdateTripLiveData().observe(this, Observer {
+            it?.let {
+                when (it) {
+                    is TripState.Loading -> handleLoading()
+                    is TripState.Success -> {
+                        handleTripSuccess(it.data)
+                        Toast.makeText(context, R.string.msg_trip_update_success, Toast.LENGTH_LONG).show()
+                    }
+                    is TripState.Error -> handleTripError(it.errorMessage)
+                }
+            }
+        })
+
+        tripViewModel.deleteUpdateTripLiveData().observe(this, Observer {
+            it?.let {
+                when (it) {
+                    is TripState.Loading -> handleLoading()
+                    is TripState.Success -> {
+                        Toast.makeText(context, R.string.msg_trip_update_success, Toast.LENGTH_LONG).show()
+                        findNavController().navigateUp()
                     }
                     is TripState.Error -> handleTripError(it.errorMessage)
                 }
