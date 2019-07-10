@@ -34,15 +34,14 @@ class TripsFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_trips, container, false)
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-        setupClickListeners()
+        setupViewListeners()
         setupRecyclerView()
         setupAdapterClickListener()
         observeUsersLiveData()
-        tripsViewModel.fetchTrips(1)
+        tripsViewModel.fetchTrips()
     }
 
     override fun onDestroyView() {
@@ -118,11 +117,15 @@ class TripsFragment : BaseFragment() {
         }
     }
 
-    private fun setupClickListeners() {
+    private fun setupViewListeners() {
         add_trip_fab.setOnClickListener {
             findNavController().navigate(
                 TripsFragmentDirections.actionTripsDestToTrip(isForAdmin = preferenceHelper.userRole == Role.ADMIN)
             )
+        }
+
+        trips_swipe_refresh.setOnRefreshListener {
+            tripsViewModel.fetchTrips()
         }
     }
 
@@ -139,26 +142,24 @@ class TripsFragment : BaseFragment() {
     }
 
     private fun handleLoading() {
-        trips_progress.makeVisible()
-        trips_rv.makeGone()
+        trips_swipe_refresh.isRefreshing = true
         trips_empty_tv.makeGone()
     }
 
     private fun handleSuccess(trips: List<Trip>?) {
-        trips_progress.makeGone()
+        trips_swipe_refresh.isRefreshing = false
         if (trips.isNullOrEmpty()) {
             trips_empty_tv.makeVisible()
+            adapter.allTrips = emptyList()
         } else {
             trips_empty_tv.makeGone()
-            trips_rv.makeVisible()
             adapter.allTrips = trips
         }
     }
 
     private fun handleError(message: String?) {
-        trips_progress.makeGone()
+        trips_swipe_refresh.isRefreshing = false
         trips_empty_tv.makeVisible()
-        trips_rv.makeGone()
         showErrorMessage(message)
     }
 }

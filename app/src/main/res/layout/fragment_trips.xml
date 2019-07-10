@@ -1,41 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/trips_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".trips.TripsFragment">
+        android:layout_height="match_parent">
 
-    <TextView
-            android:id="@+id/trips_empty_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_empty_trips"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/trips_rv"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/recycler_view_padding"
-            android:paddingBottom="@dimen/recycler_view_padding"
-            android:clipToPadding="false"
-            tools:listitem="@layout/item_trip"/>
+            tools:context=".trips.TripsFragment">
 
-    <ProgressBar
-            android:id="@+id/trips_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+        <TextView
+                android:id="@+id/trips_empty_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_empty_trips"
+                android:layout_gravity="center"
+                android:visibility="gone"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_trip_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add"
-            android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:layout_gravity="bottom|end"/>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trips_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/recycler_view_padding"
+                android:paddingBottom="@dimen/recycler_view_padding"
+                android:clipToPadding="false"
+                tools:listitem="@layout/item_trip"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add_trip_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                android:layout_marginEnd="@dimen/fab_margin"
+                android:layout_marginBottom="@dimen/fab_margin"
+                android:layout_gravity="bottom|end"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

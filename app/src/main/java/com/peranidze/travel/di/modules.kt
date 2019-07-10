@@ -95,7 +95,7 @@ val userModule = module {
 val tripsModule = module {
     single { GetTripsUseCase(get(), get(), get()) }
     single { TripsAdapter() }
-    viewModel { TripsViewModel(get()) }
+    viewModel { TripsViewModel(get(), get()) }
 }
 
 val tripModule = module {

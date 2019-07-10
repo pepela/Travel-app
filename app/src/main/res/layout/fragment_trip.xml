@@ -1,134 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/trip_destination_til"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/fragment_vertical_margin"
-            android:layout_marginStart="@dimen/fragment_horizontal_margin"
-            android:layout_marginEnd="@dimen/fragment_horizontal_margin"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <EditText
-                android:id="@+id/trip_destination_et"
-                android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/trip_destination_til"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/title_trip_destination"/>
-    </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                android:layout_marginStart="@dimen/fragment_horizontal_margin"
+                android:layout_marginEnd="@dimen/fragment_horizontal_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                    android:id="@+id/trip_destination_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title_trip_destination"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.button.MaterialButton
-            android:id="@+id/trip_start_date_btn"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/action_trip_start_date"
-            android:layout_marginTop="@dimen/fragment_vertical_margin"
-            android:layout_marginStart="@dimen/fragment_horizontal_margin"
-            app:layout_constraintTop_toBottomOf="@+id/trip_destination_til"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/trip_end_date_btn"
-            tools:text="18.07.2022"/>
-
-    <com.google.android.material.button.MaterialButton
-            android:id="@+id/trip_end_date_btn"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/action_trip_end_date"
-            android:layout_marginTop="@dimen/fragment_vertical_margin"
-            android:layout_marginEnd="@dimen/fragment_horizontal_margin"
-            app:layout_constraintTop_toBottomOf="@+id/trip_destination_til"
-            app:layout_constraintStart_toEndOf="@+id/trip_start_date_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="05.08.2022"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/trip_comment_til"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/fragment_vertical_margin"
-            android:layout_marginStart="@dimen/fragment_horizontal_margin"
-            android:layout_marginEnd="@dimen/fragment_horizontal_margin"
-            app:layout_constraintTop_toBottomOf="@+id/trip_start_date_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-        <EditText
-                android:id="@+id/trip_comment_et"
-                android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/trip_start_date_btn"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/title_trip_comment"
-                android:lines="2"/>
-    </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center"
+                android:text="@string/action_trip_start_date"
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                android:layout_marginStart="@dimen/fragment_horizontal_margin"
+                app:layout_constraintTop_toBottomOf="@+id/trip_destination_til"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/trip_end_date_btn"
+                tools:text="18.07.2022"/>
 
-    <Spinner
-            android:id="@+id/trip_users_spinner"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/fragment_horizontal_margin"
-            android:layout_marginEnd="@dimen/fragment_horizontal_margin"
-            app:layout_constraintTop_toTopOf="@+id/trip_add_user_btn"
-            app:layout_constraintBottom_toBottomOf="@+id/trip_add_user_btn"
-            app:layout_constraintEnd_toStartOf="@+id/trip_add_user_btn"
-            app:layout_constraintStart_toStartOf="parent"/>
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/trip_end_date_btn"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/action_trip_end_date"
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                android:layout_marginEnd="@dimen/fragment_horizontal_margin"
+                app:layout_constraintTop_toBottomOf="@+id/trip_destination_til"
+                app:layout_constraintStart_toEndOf="@+id/trip_start_date_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="05.08.2022"/>
 
-    <com.google.android.material.button.MaterialButton
-            android:id="@+id/trip_add_user_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/action_trip_new_user"
-            android:layout_marginTop="@dimen/fragment_vertical_margin"
-            android:layout_marginEnd="@dimen/fragment_horizontal_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/trip_comment_til"/>
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/trip_comment_til"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                android:layout_marginStart="@dimen/fragment_horizontal_margin"
+                android:layout_marginEnd="@dimen/fragment_horizontal_margin"
+                app:layout_constraintTop_toBottomOf="@+id/trip_start_date_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-    <androidx.constraintlayout.widget.Group
-            android:id="@+id/trip_users_group"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            app:constraint_referenced_ids="trip_users_spinner,trip_add_user_btn"
-            tools:visibility="visible"/>
+            <EditText
+                    android:id="@+id/trip_comment_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/title_trip_comment"
+                    android:lines="2"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-            android:id="@+id/trip_save_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/action_trip_save"
-            android:layout_marginBottom="@dimen/fragment_vertical_margin"
-            android:layout_marginTop="@dimen/fragment_vertical_margin"
-            app:layout_constraintTop_toBottomOf="@+id/trip_add_user_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="1.0"/>
+        <Spinner
+                android:id="@+id/trip_users_spinner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/fragment_horizontal_margin"
+                android:layout_marginEnd="@dimen/fragment_horizontal_margin"
+                app:layout_constraintTop_toTopOf="@+id/trip_add_user_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/trip_add_user_btn"
+                app:layout_constraintEnd_toStartOf="@+id/trip_add_user_btn"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    <ProgressBar
-            android:id="@+id/trip_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/trip_add_user_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_trip_new_user"
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                android:layout_marginEnd="@dimen/fragment_horizontal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/trip_comment_til"/>
 
-    <androidx.constraintlayout.widget.Group
-            android:id="@+id/trip_group"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:constraint_referenced_ids="trip_destination_til,trip_start_date_btn, trip_end_date_btn,trip_comment_til,trip_save_btn"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Group
+                android:id="@+id/trip_users_group"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:constraint_referenced_ids="trip_users_spinner,trip_add_user_btn"
+                tools:visibility="visible"/>
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/trip_save_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_trip_save"
+                android:layout_marginBottom="@dimen/fragment_vertical_margin"
+                android:layout_marginTop="@dimen/fragment_vertical_margin"
+                app:layout_constraintTop_toBottomOf="@+id/trip_add_user_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="1.0"/>
+
+        <ProgressBar
+                android:id="@+id/trip_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.constraintlayout.widget.Group
+                android:id="@+id/trip_group"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:constraint_referenced_ids="trip_destination_til,trip_start_date_btn, trip_end_date_btn,trip_comment_til,trip_save_btn"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
