@@ -2,6 +2,7 @@ package com.peranidze.remote.trip.mock
 
 import com.peranidze.remote.trip.TripService
 import com.peranidze.remote.trip.model.TripModel
+import com.peranidze.remote.trip.request.CreateTripRequestBody
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.*
@@ -24,6 +25,9 @@ class TripServiceMockImpl : TripService {
         TripModel(12L, "destination5", Date(1572290367181), Date(1582490367181), "comment is here"),
         TripModel(13L, "destination5", Date(1462190364181), Date(1512490367181), "no comment")
     )
+
+    override fun createTrip(createTripRequestBody: CreateTripRequestBody): Single<TripModel> =
+        Single.timer(2, TimeUnit.SECONDS).flatMap { Single.just(trips.shuffled().first()) }
 
     override fun getTrip(id: Long): Single<TripModel> =
         Single.timer(2, TimeUnit.SECONDS).flatMap { Single.just(trips.first { it.id == id }) }

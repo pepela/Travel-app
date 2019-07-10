@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 
 fun View.hideSoftKeyboard() {
     val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -24,7 +25,7 @@ fun View.makeGone() {
     this.visibility = View.GONE
 }
 
-fun EditText.validate(validator: () -> Boolean, errorMessage: Int): Boolean {
+fun TextView.validate(validator: () -> Boolean, errorMessage: Int): Boolean {
     val isValid = validator.invoke()
     if (!isValid) {
         this.error = resources.getString(errorMessage)

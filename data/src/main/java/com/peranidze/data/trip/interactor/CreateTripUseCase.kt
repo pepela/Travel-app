@@ -6,21 +6,24 @@ import com.peranidze.data.interpretator.FlowableUseCase
 import com.peranidze.data.repository.TripRepository
 import com.peranidze.data.trip.model.Trip
 import io.reactivex.Flowable
+import java.util.*
 
-open class UpdateTripUseCase(
+open class CreateTripUseCase(
     private val tripRepository: TripRepository,
     executor: ThreadExecutor,
     postExecutionThread: PostExecutionThread
-) : FlowableUseCase<Trip, Trip>(executor, postExecutionThread) {
+) : FlowableUseCase<Trip, CreateTripUseCase.Params>(executor, postExecutionThread) {
 
-    public override fun buildUseCase(params: Trip): Flowable<Trip> = tripRepository.updateTrip(params)
+    public override fun buildUseCase(params: Params): Flowable<Trip> = with(params) {
+        tripRepository.createTrip(userId, destination, startDate, endDate, comment)
+    }
 
     data class Params(
         val userId: Long,
-        val tripId: Long,
         val destination: String,
-        val startDate: Long,
-        val endDate: Long,
+        val startDate: Date,
+        val endDate: Date,
         val comment: String?
     )
+
 }

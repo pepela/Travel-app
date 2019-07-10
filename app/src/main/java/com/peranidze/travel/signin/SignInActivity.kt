@@ -86,6 +86,7 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
     private fun saveUser(user: User) {
         preferenceHelper.isUserLoggedIn = true
         preferenceHelper.userRole = user.role
+        preferenceHelper.userId = user.id
     }
 
     private fun startMain() {

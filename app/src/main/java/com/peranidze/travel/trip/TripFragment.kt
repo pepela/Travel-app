@@ -2,6 +2,7 @@ package com.peranidze.travel.trip
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.peranidze.data.trip.model.Trip
@@ -21,8 +22,8 @@ import java.util.*
 class TripFragment : BaseFragment() {
 
     private val tripViewModel: TripViewModel by viewModel()
-    private var startDate: Date? = null
-    private var endDate: Date? = null
+    private var tripStartDate: Date? = null
+    private var tripEndDate: Date? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_trip, container, false)
@@ -79,7 +80,7 @@ class TripFragment : BaseFragment() {
             }
         } ?: false
 
-    private fun isNewTrip(): Boolean = getTripId() > 0
+    private fun isNewTrip(): Boolean = getTripId() <= 0
 
     private fun setupListeners() {
         setupSaveButtonClickListener()
@@ -93,15 +94,23 @@ class TripFragment : BaseFragment() {
 
     private fun setupSaveButtonClickListener() {
         trip_save_btn.setOnClickListener {
-            if (areFieldsCorrect()) {
+            if (validateFields()) {
                 if (isNewTrip()) {
-                    // TODO create
+                    if (isForAdmin()) {
+                        // TODO get user id from spinner
+                    } else {
+                        tripViewModel.createTrip(
+                            null,
+                            trip_destination_et.text.toString(),
+                            tripStartDate!!,
+                            tripEndDate!!,
+                            trip_comment_et.text.toString()
+                        )
+                    }
                 } else {
                     // TODO update
                     //tripViewModel.updateTrip(Trip())
                 }
-            } else {
-                showErrors()
             }
         }
     }
@@ -110,10 +119,10 @@ class TripFragment : BaseFragment() {
         val fm = fragmentManager
         val startDateTv = trip_start_date_btn
         startDateTv.setOnClickListener {
-            with(DatePickerFragment.getInstance(null, endDate)) {
+            with(DatePickerFragment.getInstance(null, tripEndDate)) {
                 onDateSelectedListener = object : DatePickerFragment.OnDateSelectedListener {
                     override fun onDateSelected(date: Date) {
-                        startDate = date
+                        tripStartDate = date
                         startDateTv.error = null
                         startDateTv.text = date.toDateString()
                     }
@@ -129,10 +138,10 @@ class TripFragment : BaseFragment() {
         val fm = fragmentManager
         val endDateTv = trip_end_date_btn
         endDateTv.setOnClickListener {
-            with(DatePickerFragment.getInstance(startDate, null)) {
+            with(DatePickerFragment.getInstance(tripStartDate, null)) {
                 onDateSelectedListener = object : DatePickerFragment.OnDateSelectedListener {
                     override fun onDateSelected(date: Date) {
-                        endDate = date
+                        tripEndDate = date
                         endDateTv.error = null
                         endDateTv.text = date.toDateString()
                     }
@@ -174,6 +183,19 @@ class TripFragment : BaseFragment() {
                 }
             }
         })
+
+        tripViewModel.getCreateTripLiveData().observe(this, Observer {
+            it?.let {
+                when (it) {
+                    is TripState.Loading -> handleLoading()
+                    is TripState.Success -> {
+                        handleTripSuccess(it.data)
+                        Toast.makeText(context, "Trip was created", Toast.LENGTH_LONG).show()
+                    }
+                    is TripState.Error -> handleTripError(it.errorMessage)
+                }
+            }
+        })
     }
 
     private fun handleLoading() {
@@ -185,11 +207,10 @@ class TripFragment : BaseFragment() {
     private fun handleTripSuccess(trip: Trip?) {
         trip_progress.makeGone()
         trip_group.makeVisible()
-        trip?.let {
-            trip_destination_et.setText(it.destination)
-            trip_start_date_btn.text = it.startDate.toDateString()
-            trip_end_date_btn.text = it.endDate.toDateString()
-            trip_comment_et.setText(it.comment)
+        if (trip != null) {
+            showTrip(trip)
+        } else {
+
         }
     }
 
@@ -204,12 +225,7 @@ class TripFragment : BaseFragment() {
         trip_group.makeVisible()
         trip_users_group.makeVisible()
         pair?.let {
-            with(pair.first) {
-                trip_destination_et.setText(destination)
-                trip_start_date_btn.text = startDate.toDateString()
-                trip_end_date_btn.text = endDate.toDateString()
-                trip_comment_et.setText(comment)
-            }
+            showTrip(pair.first)
             with(pair.second) {
                 trip_users_group.makeVisible()
                 context?.let {
@@ -240,13 +256,31 @@ class TripFragment : BaseFragment() {
         }
     }
 
-    private fun areFieldsCorrect() =
-        trip_destination_et.text.toString().isNotEmpty() && startDate != null && endDate != null
+    private fun validateFields(): Boolean {
+        if (trip_destination_et.validate(
+                { trip_destination_et.text.toString().isNotEmpty() },
+                R.string.err_empty_destination
+            )
+        ) {
+            if (trip_start_date_btn.validate({ tripStartDate != null }, R.string.err_empty_start_date)) {
+                if (trip_end_date_btn.validate({ tripEndDate != null }, R.string.err_empty_end_date)) {
+                    return true
+                }
+            }
+        }
 
-    private fun showErrors() {
-        trip_destination_et.validate({ trip_destination_et.text.toString().isEmpty() }, R.string.err_empty_destination)
-        if (startDate == null) trip_start_date_btn.error = getString(R.string.err_empty_start_date)
-        if (endDate == null) trip_end_date_btn.error = getString(R.string.err_empty_end_date)
+        return false
+    }
+
+    private fun showTrip(trip: Trip) {
+        with(trip) {
+            tripStartDate = startDate
+            tripEndDate = endDate
+            trip_destination_et.setText(destination)
+            trip_start_date_btn.text = startDate.toDateString()
+            trip_end_date_btn.text = endDate.toDateString()
+            trip_comment_et.setText(comment)
+        }
     }
 
 }

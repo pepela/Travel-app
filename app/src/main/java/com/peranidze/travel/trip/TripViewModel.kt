@@ -2,6 +2,8 @@ package com.peranidze.travel.trip
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.peranidze.cache.PreferenceHelper
+import com.peranidze.data.trip.interactor.CreateTripUseCase
 import com.peranidze.data.trip.interactor.DeleteTripUseCase
 import com.peranidze.data.trip.interactor.GetTripUseCase
 import com.peranidze.data.trip.interactor.UpdateTripUseCase
@@ -12,22 +14,27 @@ import com.peranidze.travel.users.UsersState
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
+import java.util.*
 
 class TripViewModel(
     private val getTripUseCase: GetTripUseCase,
     private val getUsersUseCase: GetUsersUseCase,
     private val deleteTripUseCase: DeleteTripUseCase,
-    private val updateTripUseCase: UpdateTripUseCase
+    private val updateTripUseCase: UpdateTripUseCase,
+    private val createTripUseCase: CreateTripUseCase,
+    private val preferenceHelper: PreferenceHelper
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private var tripLiveData: MutableLiveData<TripState> = MutableLiveData()
     private var tripAndUsersLiveData: MutableLiveData<TripAndUsersState> = MutableLiveData()
     private var usersLiveData: MutableLiveData<UsersState> = MutableLiveData()
+    private var createTripLiveData: MutableLiveData<TripState> = MutableLiveData()
 
     fun getTripLiveData() = tripLiveData
     fun getTripAndUsersLiveData() = tripAndUsersLiveData
     fun getUsersLiveData() = usersLiveData
+    fun getCreateTripLiveData() = createTripLiveData
 
     fun fetchTrip(id: Long) {
         tripLiveData.postValue(TripState.Loading)
@@ -88,6 +95,39 @@ class TripViewModel(
 
                 }, {
 
+                })
+        )
+    }
+
+
+//    fun updateTrip(tripId: Long, destination: String, startDate: Long, endDate: Long, comment: String?) {
+//        usersLiveData.postValue(UsersState.Loading)
+//        disposables.add(
+//            updateTripUseCase.execute(Trip())
+//                .subscribe({
+//
+//                }, {
+//
+//                })
+//        )
+//    }
+
+    fun createTrip(userId: Long?, destination: String, startDate: Date, endDate: Date, comment: String?) {
+        createTripLiveData.postValue(TripState.Loading)
+        disposables.add(
+            createTripUseCase.execute(
+                CreateTripUseCase.Params(
+                    userId ?: preferenceHelper.userId,
+                    destination,
+                    startDate,
+                    endDate,
+                    comment
+                )
+            )
+                .subscribe({
+                    createTripLiveData.postValue(TripState.Success(it))
+                }, {
+                    createTripLiveData.postValue(TripState.Error(it.message))
                 })
         )
     }
