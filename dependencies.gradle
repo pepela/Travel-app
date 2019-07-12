@@ -32,6 +32,7 @@ ext {
     runnerVersion =           '1.2.0'
     espressoVersion =         '3.2.0'
     androidJunitVersion =     '1.1.0'
+    mockitoAndroidVersion =   '2.21.0'
 
     dataDependencies = [
             rxJava:              "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",
@@ -69,11 +70,15 @@ ext {
 
     appTestDependencies = [
             junit:               "junit:junit:${jUnitVersion}",
+            kotlinJUnit:         "org.jetbrains.kotlin:kotlin-test-junit:${kotlin_version}",
             androidRunner:       "androidx.test:runner:${runnerVersion}",
             rules:               "androidx.test:rules:${runnerVersion}",
             androidJunit:        "androidx.test.ext:junit:${androidJunitVersion}",
             espressoCore:        "androidx.test.espresso:espresso-core:${espressoVersion}",
-            koin:                "org.koin:koin-test:${koinVersion}"
+            koin:                "org.koin:koin-test:${koinVersion}",
+            archTesting:         "android.arch.core:core-testing:${lifecycleVersion}",
+            mockitoAndroid:      "org.mockito:mockito-android:${mockitoAndroidVersion}",
+            mockito:             "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
     ]
 
     remoteDependencies = [

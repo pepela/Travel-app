@@ -22,6 +22,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -55,9 +60,29 @@ dependencies {
     testImplementation appTestDependencies.junit
     testImplementation appTestDependencies.koin
 
-    androidTestImplementation appTestDependencies.koin
-    androidTestImplementation appTestDependencies.androidRunner
-    androidTestImplementation appTestDependencies.espressoCore
+    androidTestImplementation(appTestDependencies.koin, {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.mockito'
+    })
+    androidTestImplementation(appTestDependencies.androidRunner) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation(appTestDependencies.espressoCore) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     androidTestImplementation appTestDependencies.androidJunit
     androidTestImplementation appTestDependencies.rules
+    androidTestImplementation appTestDependencies.archTesting
+    androidTestImplementation appTestDependencies.mockitoAndroid
+    androidTestImplementation appTestDependencies.junit
+
+    testImplementation appTestDependencies.mockito
+    testImplementation appTestDependencies.kotlinJUnit
+
+    androidTestImplementation(appTestDependencies.mockito, {
+        exclude group: 'org.jetbrains.kotlin'
+        exclude group: 'org.mockito'
+    })
+
+
 }

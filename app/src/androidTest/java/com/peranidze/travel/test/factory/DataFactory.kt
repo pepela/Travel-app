@@ -1,0 +1,21 @@
+package com.peranidze.travel.test.factory
+
+import java.util.*
+import java.util.concurrent.ThreadLocalRandom
+
+class DataFactory {
+
+    companion object Factory {
+
+        fun randomUuid(): String = java.util.UUID.randomUUID().toString()
+
+        fun randomInt(): Int = ThreadLocalRandom.current().nextInt(0, 1000 + 1)
+
+        fun randomLong(): Long = randomInt().toLong()
+
+        fun randomBoolean(): Boolean = Math.random() < 0.5
+
+        fun randomDate(): Date = Date(randomLong())
+    }
+
+}
