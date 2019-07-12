@@ -24,6 +24,7 @@ class UserFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+        setupListener()
         observeUserLiveData()
 
         with(getUserId()) {
@@ -63,6 +64,23 @@ class UserFragment : BaseFragment() {
             }
         } ?: -1
 
+    private fun isForAdmin(): Boolean =
+        arguments?.let { bundle ->
+            with(UserFragmentArgs.fromBundle(bundle)) {
+                isForAdmin
+            }
+        } ?: false
+
+    private fun setupListener() {
+        user_save_btn.setOnClickListener {
+            if (getUserId() < 0) {
+                //create
+            } else {
+                //userViewModel.updateUser(User(getUserId(), user_email_et.text.toString(),Role.REGULAR))
+            }
+        }
+    }
+
     private fun observeUserLiveData() {
         userViewModel.getUserLiveData().observe(this, Observer {
             it?.let {
@@ -85,20 +103,16 @@ class UserFragment : BaseFragment() {
         } else {
             user_email_et.setText(user.email)
 
-            arguments?.let { bundle ->
-                with(UserFragmentArgs.fromBundle(bundle)) {
-                    if (isForAdmin) {
-                        // TODO set correct selection
-                        user_roles_spinner.adapter = ArrayAdapter(
-                            context,
-                            android.R.layout.simple_spinner_dropdown_item,
-                            listOf("REGULAR", "MANAGER", "ADMIN")
-                        )
-                    } else {
-                        showRoleTextView(user.role)
-                    }
-                }
-            } ?: showRoleTextView(user.role)
+            if (isForAdmin()) {
+                // TODO set correct selection
+                user_roles_spinner.adapter = ArrayAdapter(
+                    context,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    listOf("REGULAR", "MANAGER", "ADMIN")
+                )
+            } else {
+                showRoleTextView(user.role)
+            }
         }
     }
 

@@ -13,6 +13,7 @@ import com.peranidze.data.user.model.User
 import com.peranidze.travel.users.UsersState
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.functions.BiFunction
 import java.util.*
 
@@ -26,6 +27,13 @@ class TripViewModel(
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
+    private var getTripDisposable = Disposables.empty()
+    private var getTripAndUsersDisposable = Disposables.empty()
+    private var getUsersDisposable = Disposables.empty()
+    private var createTripDisposable = Disposables.empty()
+    private var updateTripDisposable = Disposables.empty()
+    private var deleteTripDisposable = Disposables.empty()
+
     private var tripLiveData: MutableLiveData<TripState> = MutableLiveData()
     private var tripAndUsersLiveData: MutableLiveData<TripAndUsersState> = MutableLiveData()
     private var usersLiveData: MutableLiveData<UsersState> = MutableLiveData()
@@ -41,66 +49,64 @@ class TripViewModel(
     fun deleteUpdateTripLiveData() = deleteTripLiveData
 
     fun fetchTrip(id: Long) {
+        getTripDisposable.dispose()
         tripLiveData.postValue(TripState.Loading)
-        disposables.add(
-            getTripUseCase.execute(id)
-                .subscribe({
-                    tripLiveData.postValue(TripState.Success(it))
-                }, {
-                    tripLiveData.postValue(TripState.Error(it.message))
-                })
-        )
+        getTripDisposable = getTripUseCase.execute(id)
+            .subscribe({
+                tripLiveData.postValue(TripState.Success(it))
+            }, {
+                tripLiveData.postValue(TripState.Error(it.message))
+            })
+        disposables.add(getTripDisposable)
     }
 
     fun fetchTripAndUsers(id: Long) {
+        getTripAndUsersDisposable.dispose()
         tripAndUsersLiveData.postValue(TripAndUsersState.Loading)
-        disposables.add(
-            Flowable.zip(
-                getTripUseCase.execute(id),
-                getUsersUseCase.execute(),
-                BiFunction { trip: Trip, users: List<User> -> Pair(trip, users) })
-                .subscribe({
-                    tripAndUsersLiveData.postValue(TripAndUsersState.Success(it))
-                }, {
-                    tripAndUsersLiveData.postValue(TripAndUsersState.Error(it.message))
-                })
-        )
+        getTripAndUsersDisposable = Flowable.zip(getTripUseCase.execute(id), getUsersUseCase.execute(),
+            BiFunction { trip: Trip, users: List<User> -> Pair(trip, users) })
+            .subscribe({
+                tripAndUsersLiveData.postValue(TripAndUsersState.Success(it))
+            }, {
+                tripAndUsersLiveData.postValue(TripAndUsersState.Error(it.message))
+            })
+        disposables.add(getTripAndUsersDisposable)
     }
 
     fun fetchUsers() {
+        getUsersDisposable.dispose()
         usersLiveData.postValue(UsersState.Loading)
-        disposables.add(
-            getUsersUseCase.execute()
-                .subscribe({
-                    usersLiveData.postValue(UsersState.Success(it))
-                }, {
-                    usersLiveData.postValue(UsersState.Error(it.message))
-                })
-        )
+        getUsersDisposable = getUsersUseCase.execute()
+            .subscribe({
+                usersLiveData.postValue(UsersState.Success(it))
+            }, {
+                usersLiveData.postValue(UsersState.Error(it.message))
+            })
+        disposables.add(getUsersDisposable)
     }
 
     fun deleteTrip(id: Long) {
+        deleteTripDisposable.dispose()
         deleteTripLiveData.postValue(TripState.Loading)
-        disposables.add(
-            deleteTripUseCase.execute(id)
-                .subscribe({
-                    deleteTripLiveData.postValue(TripState.Success())
-                }, {
-                    deleteTripLiveData.postValue(TripState.Error(it.message))
-                })
-        )
+        deleteTripDisposable = deleteTripUseCase.execute(id)
+            .subscribe({
+                deleteTripLiveData.postValue(TripState.Success())
+            }, {
+                deleteTripLiveData.postValue(TripState.Error(it.message))
+            })
+        disposables.add(deleteTripDisposable)
     }
 
     fun updateTrip(trip: Trip) {
+        updateTripDisposable.dispose()
         updateTripLiveData.postValue(TripState.Loading)
-        disposables.add(
-            updateTripUseCase.execute(trip)
-                .subscribe({
-                    updateTripLiveData.postValue(TripState.Success(it))
-                }, {
-                    updateTripLiveData.postValue(TripState.Error(it.message))
-                })
-        )
+        updateTripDisposable = updateTripUseCase.execute(trip)
+            .subscribe({
+                updateTripLiveData.postValue(TripState.Success(it))
+            }, {
+                updateTripLiveData.postValue(TripState.Error(it.message))
+            })
+        disposables.add(updateTripDisposable)
     }
 
 
@@ -117,23 +123,23 @@ class TripViewModel(
 //    }
 
     fun createTrip(userId: Long?, destination: String, startDate: Date, endDate: Date, comment: String?) {
+        createTripDisposable.dispose()
         createTripLiveData.postValue(TripState.Loading)
-        disposables.add(
-            createTripUseCase.execute(
-                CreateTripUseCase.Params(
-                    userId ?: preferenceHelper.userId,
-                    destination,
-                    startDate,
-                    endDate,
-                    comment
-                )
+        createTripDisposable = createTripUseCase.execute(
+            CreateTripUseCase.Params(
+                userId ?: preferenceHelper.userId,
+                destination,
+                startDate,
+                endDate,
+                comment
             )
-                .subscribe({
-                    createTripLiveData.postValue(TripState.Success(it))
-                }, {
-                    createTripLiveData.postValue(TripState.Error(it.message))
-                })
         )
+            .subscribe({
+                createTripLiveData.postValue(TripState.Success(it))
+            }, {
+                createTripLiveData.postValue(TripState.Error(it.message))
+            })
+        disposables.add(createTripDisposable)
     }
 
     override fun onCleared() {
