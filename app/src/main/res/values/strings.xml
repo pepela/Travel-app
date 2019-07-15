@@ -21,6 +21,16 @@
     <string name="msg_user_create_success">User was created</string>
     <string name="msg_user_delete_success">User was deleted</string>
 
+    <string name="user_role_admin">Admin</string>
+    <string name="user_role_manager">Manager</string>
+    <string name="user_role_regular">Regular</string>
+
+
+    <!-- users -->
+    <string name="user_role_abbreviation_admin">A</string>
+    <string name="user_role_abbreviation_manager">M</string>
+    <string name="user_role_abbreviation_regular">R</string>
+
 
     <!-- trip -->
     <string name="action_trip_save">Save</string>
@@ -73,13 +83,10 @@
 
     <!-- trips -->
     <string name="action_search">Search</string>
+    <string name="action_trips_next_month">Next month</string>
+
     <string name="content_description_destination">Destination</string>
-    <string name="user_role_admin">Admin</string>
-    <string name="user_role_manager">Manager</string>
-    <string name="user_role_regular">Regular</string>
-    <string name="user_role_abbreviation_admin">A</string>
-    <string name="user_role_abbreviation_manager">M</string>
-    <string name="user_role_abbreviation_regular">R</string>
+
     <plurals name="number_of_days_left">
         <item quantity="one">%d day left</item>
         <item quantity="other">%d days left</item>

@@ -52,6 +52,8 @@ class UserFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun getCoordinateView(): View = user_coordinate_layout
+
     private fun setupForCreateUpdate() {
         with(getUserLogin()) {
             if (this != null) {
@@ -94,7 +96,7 @@ class UserFragment : BaseFragment() {
                     is CreateUserState.Loading -> showLoading()
                     is CreateUserState.Success -> {
                         showUser(it.data)
-                        showToast(R.string.msg_user_create_success)
+                        showMessage(R.string.msg_user_create_success)
                     }
                     is CreateUserState.Error -> showError(it.errorMessage)
                 }
@@ -120,7 +122,7 @@ class UserFragment : BaseFragment() {
                     is UpdateUserState.Loading -> showLoading()
                     is UpdateUserState.Success -> {
                         showUser(it.data)
-                        showToast(R.string.msg_user_update_success)
+                        showMessage(R.string.msg_user_update_success)
                     }
                     is UpdateUserState.Error -> showError(it.errorMessage)
                 }

@@ -1,13 +1,14 @@
 package com.peranidze.travel.user
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.peranidze.data.user.interactor.CreateUserUseCase
 import com.peranidze.data.user.interactor.DeleteUserUseCase
 import com.peranidze.data.user.interactor.GetUserUseCase
 import com.peranidze.data.user.interactor.UpdateUserUseCase
 import com.peranidze.data.user.model.Role
 import com.peranidze.data.user.model.User
+import com.peranidze.remote.exception.UnauthorizedException
+import com.peranidze.travel.main.MainViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
 
@@ -16,7 +17,7 @@ class UserViewModel(
     private val updateUserUseCase: UpdateUserUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val createUserUseCase: CreateUserUseCase
-) : ViewModel() {
+) : MainViewModel() {
 
     private val disposables = CompositeDisposable()
     private var getUserDisposable = Disposables.empty()
@@ -41,7 +42,11 @@ class UserViewModel(
             .subscribe({
                 getUserLiveData.postValue(GetUserState.Success(it))
             }, {
-                getUserLiveData.postValue(GetUserState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    getUserLiveData.postValue(GetUserState.Error(it.message))
+                }
             })
         disposables.add(getUserDisposable)
     }
@@ -53,7 +58,11 @@ class UserViewModel(
             .subscribe({
                 createUserLiveData.postValue(CreateUserState.Success(it))
             }, {
-                createUserLiveData.postValue(CreateUserState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    createUserLiveData.postValue(CreateUserState.Error(it.message))
+                }
             })
         disposables.add(createUserDisposable)
     }
@@ -65,7 +74,11 @@ class UserViewModel(
             .subscribe({
                 updateUserLiveData.postValue(UpdateUserState.Success(it))
             }, {
-                updateUserLiveData.postValue(UpdateUserState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    updateUserLiveData.postValue(UpdateUserState.Error(it.message))
+                }
             })
         disposables.add(updateUserDisposable)
     }
@@ -77,7 +90,11 @@ class UserViewModel(
             .subscribe({
                 deleteUserLiveData.postValue(DeleteUserState.Success())
             }, {
-                deleteUserLiveData.postValue(DeleteUserState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    deleteUserLiveData.postValue(DeleteUserState.Error(it.message))
+                }
             })
         disposables.add(deleteUserDisposable)
     }

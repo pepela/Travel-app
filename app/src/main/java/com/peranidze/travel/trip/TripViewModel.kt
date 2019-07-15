@@ -1,7 +1,6 @@
 package com.peranidze.travel.trip
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.peranidze.data.trip.interactor.CreateTripUseCase
 import com.peranidze.data.trip.interactor.DeleteTripUseCase
 import com.peranidze.data.trip.interactor.GetTripUseCase
@@ -9,6 +8,8 @@ import com.peranidze.data.trip.interactor.UpdateTripUseCase
 import com.peranidze.data.trip.model.Trip
 import com.peranidze.data.user.interactor.GetUsersUseCase
 import com.peranidze.data.user.model.User
+import com.peranidze.remote.exception.UnauthorizedException
+import com.peranidze.travel.main.MainViewModel
 import com.peranidze.travel.users.UsersState
 import io.reactivex.Flowable
 import io.reactivex.disposables.CompositeDisposable
@@ -22,7 +23,7 @@ class TripViewModel(
     private val deleteTripUseCase: DeleteTripUseCase,
     private val updateTripUseCase: UpdateTripUseCase,
     private val createTripUseCase: CreateTripUseCase
-) : ViewModel() {
+) : MainViewModel() {
 
     private val disposables = CompositeDisposable()
     private var getTripDisposable = Disposables.empty()
@@ -53,7 +54,11 @@ class TripViewModel(
             .subscribe({
                 tripLiveData.postValue(TripState.Success(it))
             }, {
-                tripLiveData.postValue(TripState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    tripLiveData.postValue(TripState.Error(it.message))
+                }
             })
         disposables.add(getTripDisposable)
     }
@@ -66,7 +71,11 @@ class TripViewModel(
             .subscribe({
                 tripAndUsersLiveData.postValue(TripAndUsersState.Success(it))
             }, {
-                tripAndUsersLiveData.postValue(TripAndUsersState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    tripAndUsersLiveData.postValue(TripAndUsersState.Error(it.message))
+                }
             })
         disposables.add(getTripAndUsersDisposable)
     }
@@ -78,7 +87,11 @@ class TripViewModel(
             .subscribe({
                 usersLiveData.postValue(UsersState.Success(it))
             }, {
-                usersLiveData.postValue(UsersState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    usersLiveData.postValue(UsersState.Error(it.message))
+                }
             })
         disposables.add(getUsersDisposable)
     }
@@ -102,7 +115,11 @@ class TripViewModel(
             .subscribe({
                 updateTripLiveData.postValue(TripState.Success(it))
             }, {
-                updateTripLiveData.postValue(TripState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    updateTripLiveData.postValue(TripState.Error(it.message))
+                }
             })
         disposables.add(updateTripDisposable)
     }
@@ -121,7 +138,11 @@ class TripViewModel(
             .subscribe({
                 createTripLiveData.postValue(TripState.Success(it))
             }, {
-                createTripLiveData.postValue(TripState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    createTripLiveData.postValue(TripState.Error(it.message))
+                }
             })
         disposables.add(createTripDisposable)
     }

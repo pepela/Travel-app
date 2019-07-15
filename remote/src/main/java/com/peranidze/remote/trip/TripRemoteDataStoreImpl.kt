@@ -3,6 +3,7 @@ package com.peranidze.remote.trip
 import com.peranidze.data.source.trip.TripDataStore
 import com.peranidze.data.trip.model.Trip
 import com.peranidze.data.user.model.User
+import com.peranidze.remote.extensions.withErrorHandling
 import com.peranidze.remote.trip.mapper.TripMapper
 import com.peranidze.remote.trip.request.CreateTripRequestBody
 import com.peranidze.remote.user.mapper.UserMapper
@@ -27,6 +28,7 @@ class TripRemoteDataStoreImpl(
                 if (user != null) userMapper.toModel(user) else null
             )
         )
+            .withErrorHandling()
             .map {
                 tripMapper.from(it)
             }
@@ -37,6 +39,7 @@ class TripRemoteDataStoreImpl(
             .map {
                 tripMapper.from(it)
             }
+            .withErrorHandling()
             .toFlowable()
 
     override fun getTripsFor(userId: Long): Flowable<List<Trip>> =
@@ -44,6 +47,7 @@ class TripRemoteDataStoreImpl(
             .map {
                 tripMapper.from(it)
             }
+            .withErrorHandling()
             .toFlowable()
 
     override fun updateTrip(trip: Trip): Flowable<Trip> =
@@ -51,8 +55,9 @@ class TripRemoteDataStoreImpl(
             .map {
                 tripMapper.from(it)
             }
+            .withErrorHandling()
             .toFlowable()
 
     override fun deleteTrip(id: Long): Completable =
-        tripService.deleteTrip(id)
+        tripService.deleteTrip(id).withErrorHandling()
 }

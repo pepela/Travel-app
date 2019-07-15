@@ -3,6 +3,7 @@ package com.peranidze.remote.user
 import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.user.model.Role
 import com.peranidze.data.user.model.User
+import com.peranidze.remote.extensions.withErrorHandling
 import com.peranidze.remote.user.mapper.RoleMapper
 import com.peranidze.remote.user.mapper.UserMapper
 import com.peranidze.remote.user.request.CreateUserRequestBody
@@ -26,6 +27,7 @@ class UserRemoteDataStoreImpl(
             }
             .toFlowable()
 
+
     override fun register(login: String, email: String, password: String): Flowable<User> =
         userService.register(SignUpRequestBody(login, email, password))
             .map {
@@ -35,6 +37,7 @@ class UserRemoteDataStoreImpl(
 
     override fun getUser(login: String): Flowable<User> =
         userService.getUser(login)
+            .withErrorHandling()
             .map {
                 userMapper.from(it)
             }
@@ -42,17 +45,19 @@ class UserRemoteDataStoreImpl(
 
     override fun getUsers(): Flowable<List<User>> =
         userService.getUsers()
+            .withErrorHandling()
             .map {
                 userMapper.from(it)
             }
             .toFlowable()
 
     override fun deleteUser(login: String): Completable =
-        userService.deleteUser(login)
+        userService.deleteUser(login).withErrorHandling()
 
     override fun updateUser(user: User): Flowable<User> =
         with(userMapper.toModel(user)) {
             userService.updateUser(UpdateUserRequestBody(id, login, email, authorities!!))
+                .withErrorHandling()
                 .map {
                     userMapper.from(it)
                 }
@@ -61,6 +66,7 @@ class UserRemoteDataStoreImpl(
 
     override fun createUser(login: String, email: String, roles: List<Role>): Flowable<User> =
         userService.createUser(CreateUserRequestBody(login, email, roleMapper.toModels(roles)))
+            .withErrorHandling()
             .map {
                 userMapper.from(it)
             }

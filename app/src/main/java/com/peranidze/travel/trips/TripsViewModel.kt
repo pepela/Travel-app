@@ -2,13 +2,14 @@ package com.peranidze.travel.trips
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.trip.interactor.GetTripsUseCase
+import com.peranidze.remote.exception.UnauthorizedException
+import com.peranidze.travel.main.MainViewModel
 import io.reactivex.disposables.Disposables
 
 class TripsViewModel(private val getTripsUseCase: GetTripsUseCase, private val preferenceHelper: PreferenceHelper) :
-    ViewModel() {
+    MainViewModel() {
 
     private var tripDisposable = Disposables.empty()
     private val tripsLiveData: MutableLiveData<TripsState> = MutableLiveData()
@@ -23,7 +24,11 @@ class TripsViewModel(private val getTripsUseCase: GetTripsUseCase, private val p
                 tripsLiveData.postValue(TripsState.Success(it))
             }, {
                 Log.e(TripsViewModel::class.java.simpleName, it.toString())
-                tripsLiveData.postValue(TripsState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    tripsLiveData.postValue(TripsState.Error(it.message))
+                }
             })
     }
 

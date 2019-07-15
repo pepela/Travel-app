@@ -69,6 +69,8 @@ class TripFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun getCoordinateView(): View = trip_coordinate_layout
+
     private fun getTripId(): Long = arguments?.let { TripFragmentArgs.fromBundle(it).tripId } ?: -1
 
     private fun isForAdmin() = arguments?.let { TripFragmentArgs.fromBundle(it).isForAdmin } ?: false
@@ -188,7 +190,7 @@ class TripFragment : BaseFragment() {
                     is TripState.Loading -> handleLoading()
                     is TripState.Success -> {
                         handleTripSuccess(it.data)
-                        showToast(R.string.msg_trip_create_success)
+                        showMessage(R.string.msg_trip_create_success)
                     }
                     is TripState.Error -> handleTripError(it.errorMessage)
                 }
@@ -201,7 +203,7 @@ class TripFragment : BaseFragment() {
                     is TripState.Loading -> handleLoading()
                     is TripState.Success -> {
                         handleTripSuccess(it.data)
-                        showToast(R.string.msg_trip_update_success)
+                        showMessage(R.string.msg_trip_update_success)
                     }
                     is TripState.Error -> handleTripError(it.errorMessage)
                 }
@@ -213,7 +215,7 @@ class TripFragment : BaseFragment() {
                 when (it) {
                     is TripState.Loading -> handleLoading()
                     is TripState.Success -> {
-                        showToast(R.string.msg_trip_update_success)
+                        showToast(R.string.msg_trip_delete_success)
                         findNavController().navigateUp()
                     }
                     is TripState.Error -> handleTripError(it.errorMessage)

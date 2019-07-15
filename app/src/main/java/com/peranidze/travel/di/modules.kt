@@ -107,5 +107,5 @@ val tripModule = module {
 }
 
 val mainModule = module {
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel() }
 }

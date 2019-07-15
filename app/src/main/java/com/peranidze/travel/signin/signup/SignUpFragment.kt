@@ -51,6 +51,8 @@ class SignUpFragment : BaseFragment() {
         }
     }
 
+    override fun getCoordinateView(): View = sign_up_coordinate_layout
+
     private fun observeSignUpLiveData() {
         signUpViewModel.getRegisterUserLiveData().observe(this, Observer {
             when (it) {
@@ -83,8 +85,16 @@ class SignUpFragment : BaseFragment() {
                 if (emailView.validate({ email.isEmail() }, R.string.err_incorrect_email)) {
                     if (passwordView.validate({ password.isNotEmpty() }, R.string.err_empty_password)) {
                         if (passwordView.validate({ isPasswordCorrect(password) }, R.string.err_incorrect_password)) {
-                            if (repeatPasswordView.validate({ repeatPassword.isNotEmpty() }, R.string.err_empty_repeat_password)) {
-                                if (repeatPasswordView.validate({ doPasswordsMatch(password, repeatPassword) }, R.string.err_passwords_do_not_match)) {
+                            if (repeatPasswordView.validate(
+                                    { repeatPassword.isNotEmpty() },
+                                    R.string.err_empty_repeat_password
+                                )
+                            ) {
+                                if (repeatPasswordView.validate(
+                                        { doPasswordsMatch(password, repeatPassword) },
+                                        R.string.err_passwords_do_not_match
+                                    )
+                                ) {
                                     signUpViewModel.registerUser(login, email, password)
                                 }
                             }

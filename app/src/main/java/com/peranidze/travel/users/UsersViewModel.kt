@@ -1,11 +1,12 @@
 package com.peranidze.travel.users
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.peranidze.data.user.interactor.GetUsersUseCase
+import com.peranidze.remote.exception.UnauthorizedException
+import com.peranidze.travel.main.MainViewModel
 import io.reactivex.disposables.Disposables
 
-class UsersViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel() {
+class UsersViewModel(private val getUsersUseCase: GetUsersUseCase) : MainViewModel() {
 
     private var usersDisposable = Disposables.empty()
 
@@ -20,7 +21,11 @@ class UsersViewModel(private val getUsersUseCase: GetUsersUseCase) : ViewModel()
             .subscribe({
                 usersLiveData.postValue(UsersState.Success(it))
             }, {
-                usersLiveData.postValue(UsersState.Error(it.message))
+                if (it is UnauthorizedException) {
+                    logout()
+                } else {
+                    usersLiveData.postValue(UsersState.Error(it.message))
+                }
             })
     }
 

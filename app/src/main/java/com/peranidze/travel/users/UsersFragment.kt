@@ -40,6 +40,8 @@ class UsersFragment : BaseFragment() {
         usersViewModel.fetchUsers()
     }
 
+    override fun getCoordinateView(): View = users_coordinate_layout
+    
     override fun onDestroyView() {
         super.onDestroyView()
         if (this::adapterClickDisposable.isInitialized) {

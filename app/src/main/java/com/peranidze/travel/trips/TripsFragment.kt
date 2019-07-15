@@ -110,6 +110,8 @@ class TripsFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun getCoordinateView(): View  = trips_coordinate_layout
+
     private fun hideMagnifyingGlass(searchView: SearchView) {
         try {
             val magId = resources.getIdentifier("android:id/search_mag_icon", null, null)

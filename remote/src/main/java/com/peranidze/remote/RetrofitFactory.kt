@@ -16,7 +16,7 @@ class RetrofitFactory {
         fun makeRetrofit(isDebug: Boolean, headerInterceptor: HeaderInterceptor): Retrofit =
             Retrofit.Builder()
                 .client(makeOkHttpClient(makeLoggingInterceptor(isDebug), headerInterceptor))
-                .baseUrl("https://still-ravine-78713.herokuapp.com/api/")
+                .baseUrl("https://travel-shmevel.herokuapp.com/api/")
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(makeGson()))
                 .build()

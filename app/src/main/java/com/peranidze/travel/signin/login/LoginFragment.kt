@@ -51,6 +51,8 @@ class LoginFragment : BaseFragment() {
         }
     }
 
+    override fun getCoordinateView(): View = login_coordinate_layout
+
     private fun observeLogin() {
         loginViewModel.getLoginLiveData().observe(this, Observer {
             when (it) {

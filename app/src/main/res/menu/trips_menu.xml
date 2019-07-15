@@ -12,7 +12,7 @@
     <group
             android:checkableBehavior="single">
         <item android:id="@+id/action_next_month"
-              android:title="Next month"
+              android:title="@string/action_trips_next_month"
               android:icon="@drawable/ic_date"
               app:showAsAction="ifRoom"/>
     </group>
