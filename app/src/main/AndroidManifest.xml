@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".signin.SignInActivity"/>
+        <activity android:name=".signin.SignInActivity"
+                  android:configChanges="keyboardHidden|screenSize|orientation"/>
         <activity android:name=".main.MainActivity"/>
     </application>
 </manifest>

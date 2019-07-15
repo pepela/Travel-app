@@ -65,7 +65,8 @@ ext {
             navigation:          "androidx.navigation:navigation-fragment-ktx:${navVersion}",
             navigationUi:        "androidx.navigation:navigation-ui-ktx:${navVersion}",
             glide:               "com.github.bumptech.glide:glide:${glideVersoin}",
-            glideCompiler:       "com.github.bumptech.glide:compiler:${glideVersoin}"
+            glideCompiler:       "com.github.bumptech.glide:compiler:${glideVersoin}",
+            okHttp:              "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     ]
 
     appTestDependencies = [

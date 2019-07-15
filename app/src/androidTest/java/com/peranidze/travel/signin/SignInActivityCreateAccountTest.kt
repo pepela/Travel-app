@@ -1,5 +1,6 @@
 package com.peranidze.travel.signin
 
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
@@ -20,6 +21,7 @@ import org.junit.runner.RunWith
 class SignInActivityCreateAccountTest {
 
     companion object {
+        private const val LOGIN = "user"
         private const val CORRECT_EMAIL = "you@are.tested"
         private const val INCORRECT_EMAIL = "not email"
         private const val PASSWORD_1 = "password"
@@ -40,18 +42,33 @@ class SignInActivityCreateAccountTest {
 
     @Test
     fun fillingSignUpShowsProgress() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
         onView(withId(R.id.sign_up_email_et)).perform(typeText(CORRECT_EMAIL))
         onView(withId(R.id.sign_up_password_et)).perform(typeText(PASSWORD_1))
         onView(withId(R.id.sign_up_repeat_password_et)).perform(typeText(PASSWORD_1))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_in_progress)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun fillingSignUpEmptyEmailShowsError() {
+    fun fillingSignUpLoginEmailShowsError() {
+        onView(withId(R.id.sign_up_email_et)).perform(typeText(CORRECT_EMAIL))
         onView(withId(R.id.sign_up_password_et)).perform(typeText(PASSWORD_1))
         onView(withId(R.id.sign_up_repeat_password_et)).perform(typeText(PASSWORD_1))
+        closeSoftKeyboard()
+        onView(withText("Sign up")).perform(click())
+
+        onView(withId(R.id.sign_up_login_et)).check(matches(hasErrorText("Please enter username")))
+    }
+
+    @Test
+    fun fillingSignUpEmptyEmailShowsError() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
+        onView(withId(R.id.sign_up_password_et)).perform(typeText(PASSWORD_1))
+        onView(withId(R.id.sign_up_repeat_password_et)).perform(typeText(PASSWORD_1))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_up_email_et)).check(matches(hasErrorText("Please enter email")))
@@ -59,9 +76,11 @@ class SignInActivityCreateAccountTest {
 
     @Test
     fun fillingSignUpWrongEmailShowsError() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
         onView(withId(R.id.sign_up_email_et)).perform(typeText(INCORRECT_EMAIL))
         onView(withId(R.id.sign_up_password_et)).perform(typeText(PASSWORD_1))
         onView(withId(R.id.sign_up_repeat_password_et)).perform(typeText(PASSWORD_1))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_up_email_et)).check(matches(hasErrorText("Incorrect email")))
@@ -69,8 +88,10 @@ class SignInActivityCreateAccountTest {
 
     @Test
     fun fillingSignUpEmptyPasswordShowsError() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
         onView(withId(R.id.sign_up_email_et)).perform(typeText(CORRECT_EMAIL))
         onView(withId(R.id.sign_up_repeat_password_et)).perform(typeText(PASSWORD_1))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_up_password_et)).check(matches(hasErrorText("Please enter password")))
@@ -78,8 +99,10 @@ class SignInActivityCreateAccountTest {
 
     @Test
     fun fillingSignUpShortPasswordShowsError() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
         onView(withId(R.id.sign_up_email_et)).perform(typeText(CORRECT_EMAIL))
         onView(withId(R.id.sign_up_password_et)).perform(typeText(INCORRECT_PASSWORD_1))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_up_password_et)).check(matches(hasErrorText("Incorrect password")))
@@ -87,8 +110,10 @@ class SignInActivityCreateAccountTest {
 
     @Test
     fun fillingSignUpLongPasswordShowsError() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
         onView(withId(R.id.sign_up_email_et)).perform(typeText(CORRECT_EMAIL))
         onView(withId(R.id.sign_up_password_et)).perform(typeText(INCORRECT_PASSWORD_2))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_up_password_et)).check(matches(hasErrorText("Incorrect password")))
@@ -96,8 +121,10 @@ class SignInActivityCreateAccountTest {
 
     @Test
     fun fillingSignUpEmptyRepeatPasswordShowsError() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
         onView(withId(R.id.sign_up_email_et)).perform(typeText(CORRECT_EMAIL))
         onView(withId(R.id.sign_up_password_et)).perform(typeText(PASSWORD_1))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_up_repeat_password_et)).check(matches(hasErrorText("Please repeat password")))
@@ -105,9 +132,11 @@ class SignInActivityCreateAccountTest {
 
     @Test
     fun fillingSignUpPasswordsDoNotMatchShowsError() {
+        onView(withId(R.id.sign_up_login_et)).perform(typeText(LOGIN))
         onView(withId(R.id.sign_up_email_et)).perform(typeText(CORRECT_EMAIL))
         onView(withId(R.id.sign_up_password_et)).perform(typeText(PASSWORD_1))
         onView(withId(R.id.sign_up_repeat_password_et)).perform(typeText(PASSWORD_2))
+        closeSoftKeyboard()
         onView(withText("Sign up")).perform(click())
 
         onView(withId(R.id.sign_up_repeat_password_et)).check(matches(hasErrorText("Password don\'t match")))

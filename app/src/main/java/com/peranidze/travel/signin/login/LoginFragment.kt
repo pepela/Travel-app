@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
-import com.peranidze.travel.extensions.isEmail
 import com.peranidze.travel.extensions.validate
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,25 +67,23 @@ class LoginFragment : BaseFragment() {
         }
 
         login_btn.setOnClickListener {
-            tryLogin(login_email_et, login_password_et)
+            tryLogin(login_username_et, login_password_et)
         }
     }
 
-    private fun tryLogin(emailView: EditText, passwordView: EditText) {
-        val email = emailView.text.toString()
+    private fun tryLogin(loginView: EditText, passwordView: EditText) {
+        val username = loginView.text.toString()
         val password = passwordView.text.toString()
 
-        if (emailView.validate({ email.isNotEmpty() }, R.string.err_empty_email)) {
-            if (emailView.validate({ email.isEmail() }, R.string.err_incorrect_email)) {
-                if (passwordView.validate({ password.isNotEmpty() }, R.string.err_empty_password)) {
-                    login(email, password)
-                }
+        if (loginView.validate({ username.isNotEmpty() }, R.string.err_empty_login)) {
+            if (passwordView.validate({ password.isNotEmpty() }, R.string.err_empty_password)) {
+                login(username, password)
             }
         }
     }
 
-    private fun login(email: String, password: String) {
-        loginViewModel.doLogin(email, password)
+    private fun login(login: String, password: String) {
+        loginViewModel.doLogin(login, password)
     }
 
     private fun handleLoading() {

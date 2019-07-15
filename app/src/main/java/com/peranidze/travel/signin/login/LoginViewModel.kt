@@ -12,11 +12,11 @@ class LoginViewModel(private val logInUserUseCase: LogInUserUseCase) : ViewModel
 
     fun getLoginLiveData() = loginLiveData
 
-    fun doLogin(email: String, password: String) {
+    fun doLogin(login: String, password: String) {
         loginLiveData.postValue(LoginState.Loading)
         loginDisposable.dispose()
         loginDisposable = logInUserUseCase
-            .execute(LogInUserUseCase.Params(email, password))
+            .execute(LogInUserUseCase.Params(login, password))
             .subscribe({
                 loginLiveData.postValue(LoginState.Success(it))
             }, {

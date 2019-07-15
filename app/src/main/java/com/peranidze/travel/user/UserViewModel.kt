@@ -2,9 +2,11 @@ package com.peranidze.travel.user
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.peranidze.data.user.interactor.CreateUserUseCase
 import com.peranidze.data.user.interactor.DeleteUserUseCase
 import com.peranidze.data.user.interactor.GetUserUseCase
 import com.peranidze.data.user.interactor.UpdateUserUseCase
+import com.peranidze.data.user.model.Role
 import com.peranidze.data.user.model.User
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposables
@@ -12,49 +14,70 @@ import io.reactivex.disposables.Disposables
 class UserViewModel(
     private val getUserUseCase: GetUserUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase
+    private val deleteUserUseCase: DeleteUserUseCase,
+    private val createUserUseCase: CreateUserUseCase
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private var getUserDisposable = Disposables.empty()
     private var updateUserDisposable = Disposables.empty()
     private var deleteUserDisposable = Disposables.empty()
-    private val userLiveData = MutableLiveData<UserState>()
+    private var createUserDisposable = Disposables.empty()
 
-    fun getUserLiveData() = userLiveData
+    private val getUserLiveData = MutableLiveData<GetUserState>()
+    private val createUserLiveData = MutableLiveData<CreateUserState>()
+    private val updateUserLiveData = MutableLiveData<UpdateUserState>()
+    private val deleteUserLiveData = MutableLiveData<DeleteUserState>()
 
-    fun fetchUser(id: Long) {
+    fun getUserLiveData() = getUserLiveData
+    fun createUserLiveData() = createUserLiveData
+    fun updateUserLiveData() = updateUserLiveData
+    fun deleteUserLiveData() = deleteUserLiveData
+
+    fun fetchUser(login: String) {
         getUserDisposable.dispose()
-        userLiveData.postValue(UserState.Loading)
-        getUserDisposable = getUserUseCase.execute(id)
+        getUserLiveData.postValue(GetUserState.Loading)
+        getUserDisposable = getUserUseCase.execute(login)
             .subscribe({
-                userLiveData.postValue(UserState.Success(it))
+                getUserLiveData.postValue(GetUserState.Success(it))
             }, {
-                userLiveData.postValue(UserState.Error(it.message))
+                getUserLiveData.postValue(GetUserState.Error(it.message))
             })
         disposables.add(getUserDisposable)
     }
 
+    fun createUser(login: String, email: String, roles: List<Role>) {
+        createUserDisposable.dispose()
+        createUserLiveData.postValue(CreateUserState.Loading)
+        createUserDisposable = createUserUseCase.execute(CreateUserUseCase.Params(login, email, roles))
+            .subscribe({
+                createUserLiveData.postValue(CreateUserState.Success(it))
+            }, {
+                createUserLiveData.postValue(CreateUserState.Error(it.message))
+            })
+        disposables.add(createUserDisposable)
+    }
+
     fun updateUser(user: User) {
         updateUserDisposable.dispose()
-        userLiveData.postValue(UserState.Loading)
+        updateUserLiveData.postValue(UpdateUserState.Loading)
         updateUserDisposable = updateUserUseCase.execute(user)
             .subscribe({
-                userLiveData.postValue(UserState.Success(it))
+                updateUserLiveData.postValue(UpdateUserState.Success(it))
             }, {
-                userLiveData.postValue(UserState.Error(it.message))
+                updateUserLiveData.postValue(UpdateUserState.Error(it.message))
             })
         disposables.add(updateUserDisposable)
     }
 
-    fun deleteUser(id: Long) {
+    fun deleteUser(login: String) {
         deleteUserDisposable.dispose()
-        userLiveData.postValue(UserState.Loading)
-        deleteUserDisposable = deleteUserUseCase.execute(id)
+        deleteUserLiveData.postValue(DeleteUserState.Loading)
+        deleteUserDisposable = deleteUserUseCase.execute(login)
             .subscribe({
-                userLiveData.postValue(UserState.Success())
+                deleteUserLiveData.postValue(DeleteUserState.Success())
             }, {
-                userLiveData.postValue(UserState.Error(it.message))
+                deleteUserLiveData.postValue(DeleteUserState.Error(it.message))
             })
         disposables.add(deleteUserDisposable)
     }

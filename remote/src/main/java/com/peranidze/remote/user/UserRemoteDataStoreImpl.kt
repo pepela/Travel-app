@@ -1,35 +1,40 @@
 package com.peranidze.remote.user
 
 import com.peranidze.data.source.user.UserDataStore
+import com.peranidze.data.user.model.Role
 import com.peranidze.data.user.model.User
+import com.peranidze.remote.user.mapper.RoleMapper
 import com.peranidze.remote.user.mapper.UserMapper
 import com.peranidze.remote.user.request.CreateUserRequestBody
 import com.peranidze.remote.user.request.LogInRequestBody
 import com.peranidze.remote.user.request.SignUpRequestBody
+import com.peranidze.remote.user.request.UpdateUserRequestBody
 import io.reactivex.Completable
 import io.reactivex.Flowable
 
 class UserRemoteDataStoreImpl(
     private val userService: UserService,
-    private val userMapper: UserMapper
-) : UserDataStore {
+    private val userMapper: UserMapper,
+    private val roleMapper: RoleMapper
+) :
+    UserDataStore {
 
-    override fun logInUser(email: String, password: String): Flowable<User> =
-        userService.logIn(LogInRequestBody(email, password))
+    override fun logInUser(login: String, password: String): Flowable<User> =
+        userService.logIn(LogInRequestBody(login, password))
             .map {
                 userMapper.from(it)
             }
             .toFlowable()
 
-    override fun signUpUser(email: String, password: String): Flowable<User> =
-        userService.signUp(SignUpRequestBody(email, password))
+    override fun register(login: String, email: String, password: String): Flowable<User> =
+        userService.register(SignUpRequestBody(login, email, password))
             .map {
                 userMapper.from(it)
             }
             .toFlowable()
 
-    override fun getUser(id: Long): Flowable<User> =
-        userService.getUser(id)
+    override fun getUser(login: String): Flowable<User> =
+        userService.getUser(login)
             .map {
                 userMapper.from(it)
             }
@@ -42,18 +47,20 @@ class UserRemoteDataStoreImpl(
             }
             .toFlowable()
 
-    override fun deleteUser(id: Long): Completable =
-        userService.deleteUser(id)
+    override fun deleteUser(login: String): Completable =
+        userService.deleteUser(login)
 
     override fun updateUser(user: User): Flowable<User> =
-        userService.updateUser(user.id, userMapper.toModel(user))
-            .map {
-                userMapper.from(it)
-            }
-            .toFlowable()
+        with(userMapper.toModel(user)) {
+            userService.updateUser(UpdateUserRequestBody(id, login, email, authorities!!))
+                .map {
+                    userMapper.from(it)
+                }
+                .toFlowable()
+        }
 
-    override fun createUser(user: User): Flowable<User> =
-        userService.createUser(CreateUserRequestBody(user.email, user.password!!))
+    override fun createUser(login: String, email: String, roles: List<Role>): Flowable<User> =
+        userService.createUser(CreateUserRequestBody(login, email, roleMapper.toModels(roles)))
             .map {
                 userMapper.from(it)
             }

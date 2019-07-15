@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.peranidze.cache.PreferenceHelper
+import com.peranidze.data.user.model.Role
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseActivity
@@ -41,7 +42,7 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
     private fun showSignUpFragment() {
         with(supportFragmentManager) {
             beginTransaction()
-                .replace(R.id.sign_in_container, SignUpFragment.createInstance(), LoginFragment.TAG)
+                .replace(R.id.sign_in_container, SignUpFragment.createInstance(), SignUpFragment.TAG)
                 .addToBackStack(null)
                 .commit()
         }
@@ -85,8 +86,11 @@ class SignInActivity : BaseActivity(), LoginFragment.OnLoginFragmentInteractionL
 
     private fun saveUser(user: User) {
         preferenceHelper.isUserLoggedIn = true
-        preferenceHelper.userRole = user.role
         preferenceHelper.userId = user.id
+        preferenceHelper.token = user.token
+        preferenceHelper.login = user.login
+        preferenceHelper.isAdmin = user.roles.contains(Role.ADMIN)
+        preferenceHelper.isManager = user.roles.contains(Role.MANAGER)
     }
 
     private fun startMain() {

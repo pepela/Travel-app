@@ -7,15 +7,15 @@ import com.peranidze.data.repository.UserRepository
 import com.peranidze.data.user.model.User
 import io.reactivex.Flowable
 
-open class LogInUserUseCase(
+open class RegisterUserUseCase(
     private val userRepository: UserRepository,
     executor: ThreadExecutor,
     postExecutionThread: PostExecutionThread
-) : FlowableUseCase<User, LogInUserUseCase.Params>(executor, postExecutionThread) {
+) : FlowableUseCase<User, RegisterUserUseCase.Params>(executor, postExecutionThread) {
 
     public override fun buildUseCase(params: Params): Flowable<User> =
-        userRepository.logInUser(params.login, params.password)
+        userRepository.register(params.login, params.email, params.password)
 
-    data class Params(val login: String, val password: String)
+    data class Params(val login: String, val email: String, val password: String)
 
 }

@@ -4,7 +4,10 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.peranidze.data.trip.model.Trip
+import com.peranidze.data.user.model.Role
+import com.peranidze.data.user.model.User
 import com.peranidze.remote.trip.mapper.TripMapper
+import com.peranidze.remote.user.mapper.UserMapper
 import com.peranidze.test.DataFactory.Factory.randomDate
 import com.peranidze.test.DataFactory.Factory.randomLong
 import com.peranidze.test.DataFactory.Factory.randomUuid
@@ -22,22 +25,24 @@ class TripRemoteDataStoreImplTest {
     companion object {
         private const val TRIP_ID = 1L
         private const val USER_ID = 1L
-        private val TRIP = Trip(randomLong(), randomUuid(), randomDate(), randomDate(), randomUuid())
+        private val USER = User(randomLong(), randomUuid(), randomUuid(), listOf(Role.REGULAR), randomUuid())
+        private val TRIP = Trip(randomLong(), randomUuid(), randomDate(), randomDate(), randomUuid(), USER)
         private val TRIP_MODEL = TripModelFactory.makeTripModel()
         private val TRIPS = TripModelFactory.makeTripModels()
     }
 
     private val tripService = mock<TripService>()
     private val tripMapper = mock<TripMapper>()
+    private val userMapper = mock<UserMapper>()
 
-    private val tripRemoteDataStoreImpl = TripRemoteDataStoreImpl(tripService, tripMapper)
+    private val tripRemoteDataStoreImpl = TripRemoteDataStoreImpl(tripService, tripMapper, userMapper)
 
     @Before
     fun setup() {
         whenever(tripService.getTrips()).thenReturn(Single.just(TRIPS))
         whenever(tripService.getTrip(any())).thenReturn(Single.just(TRIP_MODEL))
         whenever(tripService.deleteTrip(any())).thenReturn(Completable.complete())
-        whenever(tripService.updateTrip(any(), any())).thenReturn(Single.just(TRIP_MODEL))
+        whenever(tripService.updateTrip(any())).thenReturn(Single.just(TRIP_MODEL))
         whenever(tripMapper.from(TRIP_MODEL)).thenReturn(TRIP)
         whenever(tripMapper.toModel(TRIP)).thenReturn(TRIP_MODEL)
     }

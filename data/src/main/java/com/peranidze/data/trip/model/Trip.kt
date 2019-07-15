@@ -1,5 +1,6 @@
 package com.peranidze.data.trip.model
 
+import com.peranidze.data.user.model.User
 import java.util.*
 
 data class Trip(
@@ -7,6 +8,7 @@ data class Trip(
     val destination: String,
     val startDate: Date,
     val endDate: Date,
-    val comment: String? = null
+    val comment: String? = null,
+    val user: User
 )
 

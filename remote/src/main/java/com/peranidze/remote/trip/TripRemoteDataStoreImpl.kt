@@ -2,25 +2,31 @@ package com.peranidze.remote.trip
 
 import com.peranidze.data.source.trip.TripDataStore
 import com.peranidze.data.trip.model.Trip
+import com.peranidze.data.user.model.User
 import com.peranidze.remote.trip.mapper.TripMapper
 import com.peranidze.remote.trip.request.CreateTripRequestBody
+import com.peranidze.remote.user.mapper.UserMapper
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import java.util.*
 
 class TripRemoteDataStoreImpl(
     private val tripService: TripService,
-    private val tripMapper: TripMapper
+    private val tripMapper: TripMapper,
+    private val userMapper: UserMapper
 ) : TripDataStore {
 
-    override fun createTrip(
-        userId: Long,
-        destination: String,
-        startDate: Date,
-        endDate: Date,
-        comment: String?
-    ): Flowable<Trip> =
-        tripService.createTrip(CreateTripRequestBody(userId, destination, startDate, endDate, comment))
+    override fun createTrip(destination: String, startDate: Date, endDate: Date, comment: String?, user: User?)
+            : Flowable<Trip> =
+        tripService.createTrip(
+            CreateTripRequestBody(
+                destination,
+                startDate,
+                endDate,
+                comment,
+                if (user != null) userMapper.toModel(user) else null
+            )
+        )
             .map {
                 tripMapper.from(it)
             }
@@ -41,7 +47,7 @@ class TripRemoteDataStoreImpl(
             .toFlowable()
 
     override fun updateTrip(trip: Trip): Flowable<Trip> =
-        tripService.updateTrip(trip.id, tripMapper.toModel(trip))
+        tripService.updateTrip(tripMapper.toModel(trip))
             .map {
                 tripMapper.from(it)
             }

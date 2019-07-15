@@ -2,7 +2,7 @@ package com.peranidze.travel.trip
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import android.widget.AdapterView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.peranidze.data.trip.model.Trip
@@ -24,6 +24,8 @@ class TripFragment : BaseFragment() {
     private val tripViewModel: TripViewModel by viewModel()
     private var tripStartDate: Date? = null
     private var tripEndDate: Date? = null
+    private lateinit var selectedUser: User
+    private lateinit var currentTrip: Trip
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_trip, container, false)
@@ -33,6 +35,7 @@ class TripFragment : BaseFragment() {
         setHasOptionsMenu(true)
         setupListeners()
         observeTripLiveData()
+        setupSpinnerListener()
 
         val tripId = getTripId()
         val isForAdmin = isForAdmin()
@@ -66,19 +69,9 @@ class TripFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun getTripId(): Long =
-        arguments?.let {
-            with(TripFragmentArgs.fromBundle(it)) {
-                tripId
-            }
-        } ?: -1
+    private fun getTripId(): Long = arguments?.let { TripFragmentArgs.fromBundle(it).tripId } ?: -1
 
-    private fun isForAdmin() =
-        arguments?.let {
-            with(TripFragmentArgs.fromBundle(it)) {
-                isForAdmin
-            }
-        } ?: false
+    private fun isForAdmin() = arguments?.let { TripFragmentArgs.fromBundle(it).isForAdmin } ?: false
 
     private fun isNewTrip(): Boolean = getTripId() <= 0
 
@@ -101,25 +94,24 @@ class TripFragment : BaseFragment() {
             if (validateFields()) {
                 if (isNewTrip()) {
                     if (isForAdmin()) {
-                        // TODO get user id from spinner
-                    } else {
                         tripViewModel.createTrip(
-                            null,
                             getDestination(),
                             tripStartDate!!,
                             tripEndDate!!,
-                            getComment()
+                            getComment(),
+                            selectedUser
                         )
+                    } else {
+                        tripViewModel.createTrip(getDestination(), tripStartDate!!, tripEndDate!!, getComment())
                     }
                 } else {
-                    // Update user too
                     tripViewModel.updateTrip(
-                        Trip(
-                            getTripId(),
-                            getDestination(),
-                            tripStartDate!!,
-                            tripEndDate!!,
-                            getComment()
+                        currentTrip.copy(
+                            destination = getDestination(),
+                            startDate = tripStartDate!!,
+                            endDate = tripEndDate!!,
+                            comment = getComment(),
+                            user = selectedUser
                         )
                     )
                 }
@@ -165,6 +157,18 @@ class TripFragment : BaseFragment() {
         }
     }
 
+    private fun setupSpinnerListener() {
+        trip_users_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selectedUser = parent?.getItemAtPosition(position) as User
+            }
+        }
+    }
+
     private fun observeTripLiveData() {
         tripViewModel.getTripLiveData().observe(this, Observer {
             it?.let {
@@ -202,7 +206,7 @@ class TripFragment : BaseFragment() {
                     is TripState.Loading -> handleLoading()
                     is TripState.Success -> {
                         handleTripSuccess(it.data)
-                        Toast.makeText(context, R.string.msg_trip_create_success, Toast.LENGTH_LONG).show()
+                        showToast(R.string.msg_trip_create_success)
                     }
                     is TripState.Error -> handleTripError(it.errorMessage)
                 }
@@ -215,7 +219,7 @@ class TripFragment : BaseFragment() {
                     is TripState.Loading -> handleLoading()
                     is TripState.Success -> {
                         handleTripSuccess(it.data)
-                        Toast.makeText(context, R.string.msg_trip_update_success, Toast.LENGTH_LONG).show()
+                        showToast(R.string.msg_trip_update_success)
                     }
                     is TripState.Error -> handleTripError(it.errorMessage)
                 }
@@ -227,7 +231,7 @@ class TripFragment : BaseFragment() {
                 when (it) {
                     is TripState.Loading -> handleLoading()
                     is TripState.Success -> {
-                        Toast.makeText(context, R.string.msg_trip_update_success, Toast.LENGTH_LONG).show()
+                        showToast(R.string.msg_trip_update_success)
                         findNavController().navigateUp()
                     }
                     is TripState.Error -> handleTripError(it.errorMessage)
@@ -269,7 +273,7 @@ class TripFragment : BaseFragment() {
                 context?.let {
                     val arrayAdapter = UserAdapter(it, this)
                     trip_users_spinner.adapter = arrayAdapter
-                    trip_users_spinner.setSelection(1) //TODO set correct user for trip
+                    trip_users_spinner.setSelection(this.indexOf(this.find { u -> u.id == pair.first.user.id }))
                 }
             }
         }
@@ -312,6 +316,7 @@ class TripFragment : BaseFragment() {
 
     private fun showTrip(trip: Trip) {
         with(trip) {
+            currentTrip = trip
             tripStartDate = startDate
             tripEndDate = endDate
             trip_destination_et.setText(destination)
@@ -320,5 +325,4 @@ class TripFragment : BaseFragment() {
             trip_comment_et.setText(comment)
         }
     }
-
 }

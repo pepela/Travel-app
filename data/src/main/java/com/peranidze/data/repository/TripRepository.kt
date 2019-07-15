@@ -1,13 +1,14 @@
 package com.peranidze.data.repository
 
 import com.peranidze.data.trip.model.Trip
+import com.peranidze.data.user.model.User
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import java.util.*
 
 interface TripRepository {
 
-    fun createTrip(userId: Long, destination: String, startDate: Date, endDate: Date, comment: String?): Flowable<Trip>
+    fun createTrip(destination: String, startDate: Date, endDate: Date, comment: String?, user: User?): Flowable<Trip>
 
     fun getTrip(id: Long): Flowable<Trip>
 

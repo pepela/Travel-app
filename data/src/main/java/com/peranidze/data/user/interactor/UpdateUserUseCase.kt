@@ -14,4 +14,5 @@ open class UpdateUserUseCase(
 ) : FlowableUseCase<User, User>(executor, postExecutionThread) {
 
     public override fun buildUseCase(params: User): Flowable<User> = userRepository.updateUser(params)
+
 }

@@ -52,7 +52,7 @@ class SignUpFragment : BaseFragment() {
     }
 
     private fun observeSignUpLiveData() {
-        signUpViewModel.getSignUpLiveData().observe(this, Observer {
+        signUpViewModel.getRegisterUserLiveData().observe(this, Observer {
             when (it) {
                 is SignUpState.Loading -> handleLoading()
                 is SignUpState.Error -> handleError(it.errorMessage)
@@ -63,33 +63,40 @@ class SignUpFragment : BaseFragment() {
 
     private fun setUpListener() {
         sign_up_btn.setOnClickListener {
-            trySignUp(sign_up_email_et, sign_up_password_et, sign_up_repeat_password_et)
+            trySignUp(sign_up_login_et, sign_up_email_et, sign_up_password_et, sign_up_repeat_password_et)
         }
     }
 
-    private fun trySignUp(emailView: EditText, passwordView: EditText, repeatPasswordView: EditText) {
+    private fun trySignUp(
+        loginView: EditText,
+        emailView: EditText,
+        passwordView: EditText,
+        repeatPasswordView: EditText
+    ) {
+        val login = loginView.text.toString()
         val email = emailView.text.toString()
         val password = passwordView.text.toString()
         val repeatPassword = repeatPasswordView.text.toString()
 
-        if (emailView.validate({ email.isNotEmpty() }, R.string.err_empty_email)) {
-            if (emailView.validate({ email.isEmail() }, R.string.err_incorrect_email)) {
-                if (passwordView.validate({ password.isNotEmpty() }, R.string.err_empty_password)) {
-                    if (passwordView.validate({ isPasswordCorrect(password) }, R.string.err_incorrect_password)) {
-                        if (repeatPasswordView.validate({ repeatPassword.isNotEmpty() },
-                                R.string.err_empty_repeat_password)) {
-                            if (repeatPasswordView.validate({ doPasswordsMatch(password, repeatPassword) },
-                                    R.string.err_passwords_do_not_match)) {
-                                signUpViewModel.doSignUp(email, password)
+        if (loginView.validate({ login.isNotEmpty() }, R.string.err_empty_login)) {
+            if (emailView.validate({ email.isNotEmpty() }, R.string.err_empty_email)) {
+                if (emailView.validate({ email.isEmail() }, R.string.err_incorrect_email)) {
+                    if (passwordView.validate({ password.isNotEmpty() }, R.string.err_empty_password)) {
+                        if (passwordView.validate({ isPasswordCorrect(password) }, R.string.err_incorrect_password)) {
+                            if (repeatPasswordView.validate({ repeatPassword.isNotEmpty() }, R.string.err_empty_repeat_password)) {
+                                if (repeatPasswordView.validate({ doPasswordsMatch(password, repeatPassword) }, R.string.err_passwords_do_not_match)) {
+                                    signUpViewModel.registerUser(login, email, password)
+                                }
                             }
                         }
                     }
                 }
             }
         }
+
     }
 
-    private fun isPasswordCorrect(password: String) = password.length in 5..16
+    private fun isPasswordCorrect(password: String) = password.length in 4..16
 
     private fun doPasswordsMatch(password: String, repeatPassword: String) = password == repeatPassword
 

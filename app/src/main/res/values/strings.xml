@@ -4,6 +4,7 @@
     <string name="title_empty_trips">Add trip to see them</string>
     <string name="title_empty_users">There are no users</string>
 
+    <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
 
@@ -12,8 +13,13 @@
     <!-- user -->
     <string name="action_save_user">Save</string>
 
+    <string name="hint_user_login">@string/username</string>
     <string name="hint_user_email">@string/email</string>
     <string name="hint_user_password">@string/password</string>
+
+    <string name="msg_user_update_success">User was updated</string>
+    <string name="msg_user_create_success">User was created</string>
+    <string name="msg_user_delete_success">User was deleted</string>
 
 
     <!-- trip -->
@@ -39,10 +45,12 @@
     <string name="action_create_account">Create account</string>
     <string name="action_sign_up">Sign up</string>
 
+    <string name="hint_login">@string/username</string>
     <string name="hint_email">@string/email</string>
     <string name="hint_password">@string/password</string>
     <string name="hint_repeat_password">Repeat password</string>
 
+    <string name="err_empty_login">Please enter username</string>
     <string name="err_empty_email">Please enter email</string>
     <string name="err_empty_password">Please enter password</string>
     <string name="err_empty_repeat_password">Please repeat password</string>
@@ -66,6 +74,12 @@
     <!-- trips -->
     <string name="action_search">Search</string>
     <string name="content_description_destination">Destination</string>
+    <string name="user_role_admin">Admin</string>
+    <string name="user_role_manager">Manager</string>
+    <string name="user_role_regular">Regular</string>
+    <string name="user_role_abbreviation_admin">A</string>
+    <string name="user_role_abbreviation_manager">M</string>
+    <string name="user_role_abbreviation_regular">R</string>
     <plurals name="number_of_days_left">
         <item quantity="one">%d day left</item>
         <item quantity="other">%d days left</item>

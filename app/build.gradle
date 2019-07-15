@@ -54,6 +54,7 @@ dependencies {
     implementation appDependencies.navigation
     implementation appDependencies.navigationUi
     implementation appDependencies.glide
+    implementation appDependencies.okHttp
 
     kapt appDependencies.glideCompiler
 

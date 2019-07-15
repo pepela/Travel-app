@@ -8,12 +8,12 @@ open class UserMapper(private val roleMapper: RoleMapper) : EntityMapper<UserMod
 
     override fun from(model: UserModel): User =
         with(model) {
-            User(id, email, roleMapper.from(role), token)
+            User(id, login, email, if (authorities != null) roleMapper.from(authorities) else emptyList(), jwt)
         }
 
     override fun toModel(entity: User): UserModel =
         with(entity) {
-            UserModel(id, email, roleMapper.toModel(role), token)
+            UserModel(id, login, email, roleMapper.toModels(roles), token)
         }
 }
 

@@ -17,8 +17,8 @@ interface TripService {
     @GET("trips/")
     fun getTrips(): Single<List<TripModel>>
 
-    @PUT("trips/{id}")
-    fun updateTrip(@Path("id") id: Long, @Body tripModel: TripModel): Single<TripModel>
+    @PUT("trips/")
+    fun updateTrip(@Body tripModel: TripModel): Single<TripModel>
 
     @DELETE("trips/{id}")
     fun deleteTrip(@Path("id") id: Long): Completable

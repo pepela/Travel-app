@@ -14,15 +14,15 @@ import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.source.user.UserDataStoreFactory
 import com.peranidze.data.trip.interactor.*
 import com.peranidze.data.user.interactor.*
+import com.peranidze.remote.HeaderInterceptor
 import com.peranidze.remote.trip.TripRemoteDataStoreImpl
-import com.peranidze.remote.trip.TripService
+import com.peranidze.remote.trip.TripServiceFactory
 import com.peranidze.remote.trip.mapper.TripMapper
-import com.peranidze.remote.trip.mock.TripServiceMockImpl
 import com.peranidze.remote.user.UserRemoteDataStoreImpl
-import com.peranidze.remote.user.UserService
+import com.peranidze.remote.user.UserServiceFactory
 import com.peranidze.remote.user.mapper.RoleMapper
 import com.peranidze.remote.user.mapper.UserMapper
-import com.peranidze.remote.user.mock.UserServiceMockImpl
+import com.peranidze.travel.BuildConfig
 import com.peranidze.travel.UiThread
 import com.peranidze.travel.launcher.LauncherViewModel
 import com.peranidze.travel.main.MainViewModel
@@ -44,24 +44,23 @@ val applicationModule = module(override = true) {
     single { UiThread() as PostExecutionThread }
 
     single { PreferenceHelper(androidContext()) }
+    single { HeaderInterceptor() }
 
     // Users
     single { UserDataStoreFactory(get()) }
     single<UserRepository> { UserDataRepository(get()) }
-    single<UserDataStore> { UserRemoteDataStoreImpl(get(), get()) }
-    //single { UserServiceFactory.makeUserServiceFactory(BuildConfig.DEBUG) }
-    single<UserService> { UserServiceMockImpl() }
+    single<UserDataStore> { UserRemoteDataStoreImpl(get(), get(), get()) }
+    single { UserServiceFactory.makeUserServiceFactory(BuildConfig.DEBUG, get()) }
 
     // Trips
     single { TripDataStoreFactory(get()) }
     single<TripRepository> { TripDataRepository(get()) }
-    single<TripDataStore> { TripRemoteDataStoreImpl(get(), get()) }
-    //single { TripServiceFactory.makeTripService(BuildConfig.DEBUG) }
-    single<TripService> { TripServiceMockImpl() }
+    single<TripDataStore> { TripRemoteDataStoreImpl(get(), get(), get()) }
+    single { TripServiceFactory.makeTripService(BuildConfig.DEBUG, get()) }
 
     // Mappers
     single { RoleMapper() }
-    single { TripMapper() }
+    single { TripMapper(get()) }
     single { UserMapper(get()) }
 }
 
@@ -75,7 +74,7 @@ val loginModule = module {
 }
 
 val signUpModule = module {
-    single { SignUpUserUseCase(get(), get(), get()) }
+    single { RegisterUserUseCase(get(), get(), get()) }
     viewModel { SignUpViewModel(get()) }
 }
 
@@ -89,7 +88,8 @@ val userModule = module {
     single { GetUserUseCase(get(), get(), get()) }
     single { UpdateUserUseCase(get(), get(), get()) }
     single { DeleteUserUseCase(get(), get(), get()) }
-    viewModel { UserViewModel(get(), get(), get()) }
+    single { CreateUserUseCase(get(), get(), get()) }
+    viewModel { UserViewModel(get(), get(), get(), get()) }
 }
 
 val tripsModule = module {
@@ -103,7 +103,7 @@ val tripModule = module {
     single { UpdateTripUseCase(get(), get(), get()) }
     single { DeleteTripUseCase(get(), get(), get()) }
     single { CreateTripUseCase(get(), get(), get()) }
-    viewModel { TripViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { TripViewModel(get(), get(), get(), get(), get()) }
 }
 
 val mainModule = module {

@@ -8,4 +8,6 @@ interface EntityMapper<Model, Entity> {
 
     fun from(models: List<Model>): List<Entity> = MutableList(models.size) { from(models[it]) }
 
+    fun toModels(entities: List<Entity>): List<Model> = MutableList(entities.size) { toModel(entities[it]) }
+
 }

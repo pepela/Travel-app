@@ -10,7 +10,7 @@ class UserFactory {
 
     companion object Factory {
 
-        fun makeUser() = User(randomLong(), randomUuid(), makeRole(), randomUuid())
+        fun makeUser() = User(randomLong(), randomUuid(), randomUuid(), listOf(makeRole()), randomUuid())
 
         fun makeUsers(count: Int = randomInt()): List<User> = List(count) { makeUser() }
     }

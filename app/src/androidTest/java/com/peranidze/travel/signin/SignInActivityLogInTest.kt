@@ -20,8 +20,7 @@ import org.junit.runner.RunWith
 class SignInActivityLogInTest {
 
     companion object {
-        private const val CORRECT_EMAIL = "you@are.tested"
-        private const val INCORRECT_EMAIL = "not email"
+        private const val LOGIN = "user"
         private const val PASSWORD_1 = "password"
     }
 
@@ -30,7 +29,7 @@ class SignInActivityLogInTest {
 
     @Test
     fun loginFormIsDisplayed() {
-        onView(withId(R.id.login_email_et)).check(matches(isDisplayed()))
+        onView(withId(R.id.login_username_et)).check(matches(isDisplayed()))
         onView(withId(R.id.login_password_et)).check(matches(isDisplayed()))
         onView(withText("Log in")).check(matches(isDisplayed()))
         onView(withText("Create account")).check(matches(isDisplayed()))
@@ -42,26 +41,16 @@ class SignInActivityLogInTest {
     }
 
     @Test
-    fun emptyEmailShowsError() {
+    fun emptyLoginShowsError() {
         onView(withId(R.id.login_password_et)).perform(typeText(PASSWORD_1))
         onView(withText("Log in")).perform(click())
 
-        onView(withId(R.id.login_email_et)).check(matches(hasErrorText("Please enter email")))
-    }
-
-    @Test
-    fun invalidEmailShowsError() {
-        onView(withId(R.id.login_email_et)).perform(typeText(INCORRECT_EMAIL))
-        onView(withId(R.id.login_password_et)).perform(typeText(PASSWORD_1))
-        onView(withText("Log in")).perform(click())
-
-        onView(withId(R.id.login_email_et)).check(matches(hasErrorText("Incorrect email")))
-        onView(withId(R.id.sign_in_progress)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.login_username_et)).check(matches(hasErrorText("Please enter username")))
     }
 
     @Test
     fun emptyPasswordShowsError() {
-        onView(withId(R.id.login_email_et)).perform(typeText(CORRECT_EMAIL))
+        onView(withId(R.id.login_username_et)).perform(typeText(LOGIN))
         onView(withText("Log in")).perform(click())
 
         onView(withId(R.id.login_password_et)).check(matches(hasErrorText("Please enter password")))
@@ -69,7 +58,7 @@ class SignInActivityLogInTest {
 
     @Test
     fun fillLoginShowsProgress() {
-        onView(withId(R.id.login_email_et)).perform(typeText(CORRECT_EMAIL))
+        onView(withId(R.id.login_username_et)).perform(typeText(LOGIN))
         onView(withId(R.id.login_password_et)).perform(typeText(PASSWORD_1))
         onView(withText("Log in")).perform(click())
 
@@ -85,7 +74,7 @@ class SignInActivityLogInTest {
         onView(withId(R.id.sign_up_repeat_password_et)).check(matches(isDisplayed()))
         onView(withText("Sign up")).check(matches(isDisplayed()))
 
-        onView(withId(R.id.login_email_et)).check(doesNotExist())
+        onView(withId(R.id.login_username_et)).check(doesNotExist())
         onView(withId(R.id.login_password_et)).check(doesNotExist())
         onView(withText("Log in")).check(doesNotExist())
         onView(withText("Create account")).check(doesNotExist())

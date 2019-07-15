@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.trip.model.Trip
-import com.peranidze.data.user.model.Role
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
 import com.peranidze.travel.extensions.hideSoftKeyboard
@@ -112,7 +111,7 @@ class TripsFragment : BaseFragment() {
     private fun setupAdapterClickListener() {
         adapterClickDisposable = adapter.clickSubject.subscribe {
             findNavController().navigate(
-                TripsFragmentDirections.actionTripsDestToTrip(it.id, preferenceHelper.userRole == Role.ADMIN)
+                TripsFragmentDirections.actionTripsDestToTrip(it.id, preferenceHelper.isAdmin)
             )
         }
     }
@@ -120,7 +119,7 @@ class TripsFragment : BaseFragment() {
     private fun setupViewListeners() {
         add_trip_fab.setOnClickListener {
             findNavController().navigate(
-                TripsFragmentDirections.actionTripsDestToTrip(isForAdmin = preferenceHelper.userRole == Role.ADMIN)
+                TripsFragmentDirections.actionTripsDestToTrip(isForAdmin = preferenceHelper.isAdmin)
             )
         }
 

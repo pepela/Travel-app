@@ -11,8 +11,8 @@ open class GetUserUseCase(
     private val userRepository: UserRepository,
     executor: ThreadExecutor,
     postExecutionThread: PostExecutionThread
-) : FlowableUseCase<User, Long>(executor, postExecutionThread) {
+) : FlowableUseCase<User, String>(executor, postExecutionThread) {
 
-    public override fun buildUseCase(params: Long): Flowable<User> = userRepository.getUser(params)
+    public override fun buildUseCase(params: String): Flowable<User> = userRepository.getUser(params)
 
 }

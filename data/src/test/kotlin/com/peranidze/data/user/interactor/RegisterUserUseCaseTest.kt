@@ -10,21 +10,26 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
 @RunWith(JUnit4::class)
-class GetUserUseCaseTest {
+class RegisterUserUseCaseTest {
+
     companion object {
-        private const val USER_LOGIN = "mock_user"
+        const val LOGIN = "user"
+        const val EMAIL = "mock_email"
+        const val PASSWORD = "mock_password"
     }
 
     private val userRepository = mock<UserRepository>()
     private val threadExecutor = mock<ThreadExecutor>()
     private val postExecutionThread = mock<PostExecutionThread>()
 
-    private val getUserUseCase = GetUserUseCase(userRepository, threadExecutor, postExecutionThread)
+    private val signUpUserUserCase =
+        RegisterUserUseCase(userRepository, threadExecutor, postExecutionThread)
 
     @Test
-    fun `getUserUseCase calls repository`() {
-        getUserUseCase.buildUseCase(USER_LOGIN)
+    fun `register user calls repository`() {
+        signUpUserUserCase.buildUseCase(RegisterUserUseCase.Params(LOGIN, EMAIL, PASSWORD))
 
-        verify(userRepository).getUser(USER_LOGIN)
+        verify(userRepository).register(LOGIN, EMAIL, PASSWORD)
     }
+
 }

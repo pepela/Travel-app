@@ -53,7 +53,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
         val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
+        calendar.set(year, month, day, 0, 0, 0)
         onDateSelectedListener.onDateSelected(calendar.time)
     }
 

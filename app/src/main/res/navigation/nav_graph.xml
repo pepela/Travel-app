@@ -35,7 +35,8 @@
             android:id="@+id/user_dest"
             android:name="com.peranidze.travel.user.UserFragment"
             android:label="@string/title_user">
-        <argument android:name="userId" app:argType="long" android:defaultValue="-1L"/>
+        <argument android:name="userLogin" app:argType="string" app:nullable="true" android:defaultValue="@null"/>
         <argument android:name="isForAdmin" app:argType="boolean" android:defaultValue="false"/>
+        <argument android:name="isForManager" app:argType="boolean" android:defaultValue="false"/>
     </fragment>
 </navigation>

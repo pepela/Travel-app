@@ -10,7 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.peranidze.cache.PreferenceHelper
-import com.peranidze.data.user.model.Role
+import com.peranidze.remote.HeaderInterceptor
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseActivity
 import com.peranidze.travel.signin.SignInActivity
@@ -27,11 +27,13 @@ class MainActivity : BaseActivity() {
 
     private val mainViewModel: MainViewModel by viewModel()
     private val preferenceHelper: PreferenceHelper by inject()
+    private val headerInterceptor: HeaderInterceptor by inject()
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setHeaderBearer()
         setupDrawerNavigation()
         setupListener()
         observeLogoutLiveData()
@@ -41,6 +43,10 @@ class MainActivity : BaseActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun setHeaderBearer() {
+        headerInterceptor.setSessionToken(preferenceHelper.token)
     }
 
     private fun setupDrawerNavigation() {
@@ -64,13 +70,14 @@ class MainActivity : BaseActivity() {
 
     private fun observeLogoutLiveData() {
         mainViewModel.getLogoutLiveData().observe(this, Observer {
+            setHeaderBearer()
             if (!it) startLogin()
             else showError()
         })
     }
 
     private fun handleUsersMenuItem() {
-        nav_view.menu.findItem(R.id.users_dest).isVisible = canManageUsers()
+        nav_view.menu.findItem(R.id.users_dest).isVisible = preferenceHelper.isManager || preferenceHelper.isAdmin
     }
 
     private fun startLogin() {
@@ -85,7 +92,5 @@ class MainActivity : BaseActivity() {
     private fun showError() {
         toast("Error")
     }
-
-    private fun canManageUsers() = preferenceHelper.userRole != Role.REGULAR
 
 }

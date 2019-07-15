@@ -1,5 +1,6 @@
 package com.peranidze.travel.trips
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.peranidze.cache.PreferenceHelper
@@ -21,6 +22,7 @@ class TripsViewModel(private val getTripsUseCase: GetTripsUseCase, private val p
             .subscribe({
                 tripsLiveData.postValue(TripsState.Success(it))
             }, {
+                Log.e(TripsViewModel::class.java.simpleName, it.toString())
                 tripsLiveData.postValue(TripsState.Error(it.message))
             })
     }

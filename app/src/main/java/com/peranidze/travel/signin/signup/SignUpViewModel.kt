@@ -2,25 +2,25 @@ package com.peranidze.travel.signin.signup
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.peranidze.data.user.interactor.SignUpUserUseCase
+import com.peranidze.data.user.interactor.RegisterUserUseCase
 import io.reactivex.disposables.CompositeDisposable
 
-class SignUpViewModel(private val signUpUserUseCase: SignUpUserUseCase) : ViewModel() {
+class SignUpViewModel(private val registerUserUseCase: RegisterUserUseCase) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    private val signUpLiveData: MutableLiveData<SignUpState> = MutableLiveData()
+    private val registerUserLiveData: MutableLiveData<SignUpState> = MutableLiveData()
 
-    fun getSignUpLiveData() = signUpLiveData
+    fun getRegisterUserLiveData() = registerUserLiveData
 
-    fun doSignUp(email: String, password: String) {
-        signUpLiveData.postValue(SignUpState.Loading)
+    fun registerUser(login: String, email: String, password: String) {
+        registerUserLiveData.postValue(SignUpState.Loading)
         disposables.add(
-            signUpUserUseCase
-                .execute(SignUpUserUseCase.Params(email, password))
+            registerUserUseCase
+                .execute(RegisterUserUseCase.Params(login, email, password))
                 .subscribe({
-                    signUpLiveData.postValue(SignUpState.Success(it))
+                    registerUserLiveData.postValue(SignUpState.Success(it))
                 }, {
-                    signUpLiveData.postValue(SignUpState.Error(it.message))
+                    registerUserLiveData.postValue(SignUpState.Error(it.message))
                 })
         )
     }

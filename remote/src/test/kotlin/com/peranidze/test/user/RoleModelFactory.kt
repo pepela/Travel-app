@@ -5,6 +5,6 @@ import com.peranidze.remote.user.model.RoleModel
 class RoleModelFactory {
 
     companion object Factory {
-        fun makeRoleModel() = RoleModel.REGULAR
+        fun makeRoleModel() = RoleModel.ROLE_USER
     }
 }

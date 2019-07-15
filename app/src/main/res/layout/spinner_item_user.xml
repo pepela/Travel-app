@@ -5,12 +5,12 @@
               android:layout_height="match_parent">
 
     <TextView
-            android:id="@+id/user_email_tv"
+            android:id="@+id/user_login_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/recycler_view_item_vertical_margin"
             android:layout_marginBottom="@dimen/recycler_view_item_vertical_margin"
             android:layout_marginStart="@dimen/recycler_view_item_horizontal_margin"
             android:layout_marginEnd="@dimen/recycler_view_item_horizontal_margin"
-            tools:text="test@mail.com"/>
+            tools:text="User"/>
 </LinearLayout>

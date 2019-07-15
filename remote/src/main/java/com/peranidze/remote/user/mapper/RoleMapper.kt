@@ -8,15 +8,15 @@ open class RoleMapper : EntityMapper<RoleModel, Role> {
 
     override fun from(model: RoleModel): Role =
         when (model) {
-            RoleModel.REGULAR -> Role.REGULAR
-            RoleModel.MANAGER -> Role.MANAGER
-            RoleModel.ADMIN -> Role.ADMIN
+            RoleModel.ROLE_USER -> Role.REGULAR
+            RoleModel.ROLE_MANAGER -> Role.MANAGER
+            RoleModel.ROLE_ADMIN -> Role.ADMIN
         }
 
     override fun toModel(entity: Role): RoleModel =
         when (entity) {
-            Role.REGULAR -> RoleModel.REGULAR
-            Role.MANAGER -> RoleModel.MANAGER
-            Role.ADMIN -> RoleModel.ADMIN
+            Role.REGULAR -> RoleModel.ROLE_USER
+            Role.MANAGER -> RoleModel.ROLE_MANAGER
+            Role.ADMIN -> RoleModel.ROLE_ADMIN
         }
 }

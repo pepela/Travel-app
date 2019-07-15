@@ -1,9 +1,10 @@
 package com.peranidze.data.user.model
 
-enum class Role {
-    REGULAR,
-    MANAGER,
-    ADMIN;
+enum class Role(val title: String) {
+    ADMIN("Admin"),
+    MANAGER("Manager"),
+    REGULAR("Regular user");
+
 
     companion object {
         fun toRoleEnum(enumString: String?): Role {

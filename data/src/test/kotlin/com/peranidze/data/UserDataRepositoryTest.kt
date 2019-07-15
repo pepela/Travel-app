@@ -6,9 +6,9 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.peranidze.data.source.user.UserDataStore
 import com.peranidze.data.source.user.UserDataStoreFactory
 import com.peranidze.data.test.factory.UserFactory
+import com.peranidze.data.user.model.Role
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,11 +18,12 @@ import org.junit.runners.JUnit4
 class UserDataRepositoryTest {
 
     companion object {
-        private const val USER_ID = 1L
+        private const val LOGIN = "user"
         private const val EMAIL = "mock_email"
         private const val PASSWORD = "mock_password"
         private val USER = UserFactory.makeUser()
         private val USERS = UserFactory.makeUsers()
+        private val ROLES = listOf(Role.REGULAR)
     }
 
     private val remoteDataStore = mock<UserDataStore>()
@@ -34,11 +35,12 @@ class UserDataRepositoryTest {
     fun setup() {
         whenever(userDataStoreFactory.getDataSource()).thenReturn(remoteDataStore)
         whenever(remoteDataStore.logInUser(any(), any())).thenReturn(Flowable.just(USER))
-        whenever(remoteDataStore.signUpUser(any(), any())).thenReturn(Flowable.just(USER))
+        whenever(remoteDataStore.register(any(), any(), any())).thenReturn(Flowable.just(USER))
         whenever(remoteDataStore.getUsers()).thenReturn(Flowable.just(USERS))
         whenever(remoteDataStore.getUser(any())).thenReturn(Flowable.just(USER))
         whenever(remoteDataStore.updateUser(any())).thenReturn(Flowable.just(USER))
         whenever(remoteDataStore.deleteUser(any())).thenReturn(Completable.complete())
+        whenever(remoteDataStore.createUser(any(), any(), any())).thenReturn(Flowable.just(USER))
     }
 
     @Test
@@ -49,13 +51,13 @@ class UserDataRepositoryTest {
 
     @Test
     fun `signUp returns user`() {
-        val testObserver = userRepository.signUpUser(EMAIL, PASSWORD).test()
+        val testObserver = userRepository.register(LOGIN, EMAIL, PASSWORD).test()
         testObserver.assertValue(USER)
     }
 
     @Test
     fun `getUser returns user`() {
-        val testObserver = userRepository.getUser(USER_ID).test()
+        val testObserver = userRepository.getUser(LOGIN).test()
         testObserver.assertValue(USER)
     }
 
@@ -74,8 +76,14 @@ class UserDataRepositoryTest {
 
     @Test
     fun `deleteUser completes`() {
-        val testObserver = userRepository.deleteUser(USER_ID).test()
+        val testObserver = userRepository.deleteUser(LOGIN).test()
         testObserver.assertComplete()
+    }
+
+    @Test
+    fun `createUser returns user`() {
+        val testObserver = userRepository.createUser(LOGIN, EMAIL, ROLES).test()
+        testObserver.assertValue(USER)
     }
 
 }

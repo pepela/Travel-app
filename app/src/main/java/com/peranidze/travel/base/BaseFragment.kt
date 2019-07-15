@@ -8,4 +8,8 @@ open class BaseFragment : Fragment() {
     fun showErrorMessage(message: String?) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
+
+    fun showToast(message: Int) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
 }

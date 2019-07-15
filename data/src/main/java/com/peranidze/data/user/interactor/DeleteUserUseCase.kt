@@ -10,7 +10,7 @@ open class DeleteUserUseCase(
     private val userRepository: UserRepository,
     executor: ThreadExecutor,
     postExecutionThread: PostExecutionThread
-) : CompletableUseCase<Long>(executor, postExecutionThread) {
+) : CompletableUseCase<String>(executor, postExecutionThread) {
 
-    public override fun buildUseCase(params: Long): Completable = userRepository.deleteUser(params)
+    public override fun buildUseCase(params: String): Completable = userRepository.deleteUser(params)
 }

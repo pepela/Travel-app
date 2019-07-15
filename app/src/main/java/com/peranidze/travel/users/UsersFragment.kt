@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.peranidze.cache.PreferenceHelper
 import com.peranidze.data.user.model.User
 import com.peranidze.travel.R
 import com.peranidze.travel.base.BaseFragment
@@ -22,6 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class UsersFragment : BaseFragment() {
 
     private val adapter: UsersAdapter by inject()
+    private val preferenceHelper: PreferenceHelper by inject()
     private val usersViewModel: UsersViewModel by viewModel()
 
     private lateinit var adapterClickDisposable: Disposable
@@ -33,7 +35,7 @@ class UsersFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupAdapterClickListener()
-        setupClickListener()
+        setupListeners()
         observeUsersLiveData()
         usersViewModel.fetchUsers()
     }
@@ -53,14 +55,26 @@ class UsersFragment : BaseFragment() {
 
     private fun setupAdapterClickListener() {
         adapterClickDisposable = adapter.clickSubject.subscribe {
-            val action = UsersFragmentDirections.actionUsersDestToUser(it.id, Math.random() < 0.5)
-            findNavController().navigate(action)
+            findNavController().navigate(
+                UsersFragmentDirections
+                    .actionUsersDestToUser(it.login, preferenceHelper.isAdmin, preferenceHelper.isManager)
+            )
         }
     }
 
-    private fun setupClickListener() {
+    private fun setupListeners() {
         add_user_fab.setOnClickListener {
-            findNavController().navigate(R.id.action_users_dest_to_user)
+            findNavController().navigate(
+                UsersFragmentDirections.actionUsersDestToUser(
+                    null,
+                    preferenceHelper.isAdmin,
+                    preferenceHelper.isManager
+                )
+            )
+        }
+
+        users_swipe_refresh.setOnRefreshListener {
+            usersViewModel.fetchUsers()
         }
     }
 
@@ -77,26 +91,24 @@ class UsersFragment : BaseFragment() {
     }
 
     private fun handleLoading() {
-        users_progress.makeVisible()
-        users_rv.makeGone()
+        users_swipe_refresh.isRefreshing = true
         users_empty_tv.makeGone()
     }
 
     private fun handleSuccess(users: List<User>?) {
-        users_progress.makeGone()
+        users_swipe_refresh.isRefreshing = false
         if (users.isNullOrEmpty()) {
             users_empty_tv.makeVisible()
+            adapter.users = emptyList()
         } else {
             users_empty_tv.makeGone()
-            users_rv.makeVisible()
             adapter.users = users
         }
     }
 
     private fun handleError(message: String?) {
-        users_progress.makeGone()
+        users_swipe_refresh.isRefreshing = false
         users_empty_tv.makeVisible()
-        users_rv.makeGone()
         showErrorMessage(message)
     }
 }

@@ -10,7 +10,7 @@ class TripFactory {
 
     companion object Factory {
 
-        fun makeTrip() = Trip(randomLong(), randomUuid(), randomDate(), randomDate(), randomUuid())
+        fun makeTrip() = Trip(randomLong(), randomUuid(), randomDate(), randomDate(), randomUuid(), UserFactory.makeUser())
 
         fun makeTrips(count: Int = randomInt()) = List(count) { makeTrip() }
     }
