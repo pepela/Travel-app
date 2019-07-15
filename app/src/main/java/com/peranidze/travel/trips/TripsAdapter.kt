@@ -11,6 +11,7 @@ import com.peranidze.travel.R
 import com.peranidze.travel.extensions.makeGone
 import com.peranidze.travel.extensions.makeVisible
 import com.peranidze.travel.extensions.toDateString
+import com.peranidze.travel.utils.DateUtils
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -21,13 +22,28 @@ class TripsAdapter : RecyclerView.Adapter<TripsAdapter.ViewHolder>() {
     var allTrips: List<Trip> = emptyList()
         set(value) {
             trips = value
+            nextMonthTrips = value.filter { trip -> isTripInNextMonth(trip) }
             field = value
         }
 
     private var trips: List<Trip> = emptyList()
         set(value) {
-            notifyDataSetChanged()
             field = value
+            notifyDataSetChanged()
+        }
+
+    private var nextMonthTrips: List<Trip> = emptyList()
+
+    var filterQuery: String? = null
+        set(value) {
+            filterTrips(value)
+            field = value
+        }
+
+    var isOnlyNextMonthSelected = false
+        set(value) {
+            field = value
+            filterTrips(filterQuery)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
@@ -39,13 +55,21 @@ class TripsAdapter : RecyclerView.Adapter<TripsAdapter.ViewHolder>() {
         holder.bind(trips[position])
     }
 
-    fun filterTrips(destination: String?) {
+    private fun filterTrips(destination: String?) {
         trips = if (destination.isNullOrEmpty()) {
-            allTrips
+            if (isOnlyNextMonthSelected) nextMonthTrips else allTrips
         } else {
-            allTrips.filter { it.destination.contains(destination) }
+            (if (isOnlyNextMonthSelected) nextMonthTrips else allTrips).filter {
+                it.destination.toLowerCase().contains(destination.toLowerCase())
+            }
         }
     }
+
+    private fun isTripInNextMonth(trip: Trip) =
+        with(DateUtils.getFirstDayOfNextMonth()) {
+            trip.startDate.after(this)
+                    || (trip.endDate.after(this) && trip.endDate.before(DateUtils.getLastDayOfNextMonth()))
+        }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

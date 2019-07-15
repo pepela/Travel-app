@@ -8,4 +8,12 @@
             android:icon="@drawable/ic_search"
             app:actionViewClass="android.widget.SearchView"
             app:showAsAction="always|collapseActionView"/>
+
+    <group
+            android:checkableBehavior="single">
+        <item android:id="@+id/action_next_month"
+              android:title="Next month"
+              android:icon="@drawable/ic_date"
+              app:showAsAction="ifRoom"/>
+    </group>
 </menu>

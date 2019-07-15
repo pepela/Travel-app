@@ -1,5 +1,7 @@
 package com.peranidze.travel.trips
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -29,6 +31,7 @@ class TripsFragment : BaseFragment() {
     private val tripsViewModel: TripsViewModel by viewModel()
 
     private lateinit var adapterClickDisposable: Disposable
+    private var isNextMonthTripsSelected = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_trips, container, false)
@@ -87,10 +90,24 @@ class TripsFragment : BaseFragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filterTrips(newText)
+                adapter.filterQuery = newText
                 return true
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_next_month) {
+            if (isNextMonthTripsSelected) {
+                item.icon.clearColorFilter()
+            } else {
+                item.icon.setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY)
+            }
+            isNextMonthTripsSelected = !isNextMonthTripsSelected
+            adapter.isOnlyNextMonthSelected = isNextMonthTripsSelected
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun hideMagnifyingGlass(searchView: SearchView) {

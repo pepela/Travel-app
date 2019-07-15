@@ -14,8 +14,12 @@ class UserAdapter(private val context: Context, private val users: List<User>) :
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = convertView?.let { it }
             ?: View.inflate(context, R.layout.spinner_drop_down_item_user, null)
-        view.findViewById<TextView>(R.id.user_login_tv).text = users[position].login
-        view.findViewById<TextView>(R.id.user_role_tv).text = users[position].roles.min()!!.title
+        with(users[position]) {
+            view.findViewById<TextView>(R.id.user_login_tv).text = login
+            roles.min()?.let {
+                view.findViewById<TextView>(R.id.user_role_tv).text = it.title
+            }
+        }
 
         return view
     }

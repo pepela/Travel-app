@@ -93,27 +93,9 @@ class TripFragment : BaseFragment() {
         trip_save_btn.setOnClickListener {
             if (validateFields()) {
                 if (isNewTrip()) {
-                    if (isForAdmin()) {
-                        tripViewModel.createTrip(
-                            getDestination(),
-                            tripStartDate!!,
-                            tripEndDate!!,
-                            getComment(),
-                            selectedUser
-                        )
-                    } else {
-                        tripViewModel.createTrip(getDestination(), tripStartDate!!, tripEndDate!!, getComment())
-                    }
+                    createNewTrip()
                 } else {
-                    tripViewModel.updateTrip(
-                        currentTrip.copy(
-                            destination = getDestination(),
-                            startDate = tripStartDate!!,
-                            endDate = tripEndDate!!,
-                            comment = getComment(),
-                            user = selectedUser
-                        )
-                    )
+                    updateTrip()
                 }
             }
         }
@@ -242,8 +224,6 @@ class TripFragment : BaseFragment() {
 
     private fun handleLoading() {
         trip_progress.makeVisible()
-        trip_group.makeGone()
-        trip_users_group.makeGone()
     }
 
     private fun handleTripSuccess(trip: Trip?) {
@@ -251,8 +231,6 @@ class TripFragment : BaseFragment() {
         trip_group.makeVisible()
         if (trip != null) {
             showTrip(trip)
-        } else {
-
         }
     }
 
@@ -312,6 +290,37 @@ class TripFragment : BaseFragment() {
         }
 
         return false
+    }
+
+    private fun createNewTrip() {
+        if (isForAdmin()) {
+            tripViewModel.createTrip(getDestination(), tripStartDate!!, tripEndDate!!, getComment(), selectedUser)
+        } else {
+            tripViewModel.createTrip(getDestination(), tripStartDate!!, tripEndDate!!, getComment())
+        }
+    }
+
+    private fun updateTrip() {
+        if (isForAdmin()) {
+            tripViewModel.updateTrip(
+                currentTrip.copy(
+                    destination = getDestination(),
+                    startDate = tripStartDate!!,
+                    endDate = tripEndDate!!,
+                    comment = getComment(),
+                    user = selectedUser
+                )
+            )
+        } else {
+            tripViewModel.updateTrip(
+                currentTrip.copy(
+                    destination = getDestination(),
+                    startDate = tripStartDate!!,
+                    endDate = tripEndDate!!,
+                    comment = getComment()
+                )
+            )
+        }
     }
 
     private fun showTrip(trip: Trip) {

@@ -28,7 +28,6 @@
                     android:hint="@string/title_trip_destination"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <com.google.android.material.button.MaterialButton
                 android:id="@+id/trip_start_date_btn"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
