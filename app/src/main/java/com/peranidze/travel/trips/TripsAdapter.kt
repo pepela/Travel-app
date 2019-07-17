@@ -81,7 +81,7 @@ class TripsAdapter : RecyclerView.Adapter<TripsAdapter.ViewHolder>() {
 
                 val daysLeftTv: TextView = findViewById(R.id.trip_days_left_tv)
                 if (isTripInFuture(trip)) {
-                    daysLeftTv.makeGone()
+                    daysLeftTv.makeVisible()
                     with(calculateDaysLeftTill(trip)) {
                         daysLeftTv.text = context.resources
                             .getQuantityString(
@@ -89,7 +89,7 @@ class TripsAdapter : RecyclerView.Adapter<TripsAdapter.ViewHolder>() {
                             )
                     }
                 } else {
-                    daysLeftTv.makeVisible()
+                    daysLeftTv.makeGone()
                 }
 
                 setOnClickListener {
