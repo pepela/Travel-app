@@ -1,41 +1,38 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+plugins {
+    id("com.android.library")
+    id("kotlin-android")
+}
 
 android {
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-
-    compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
+    compileSdkVersion = 28
 
     defaultConfig {
-        minSdkVersion globalConfiguration["androidMinSdkVersion"]
-        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
+        minSdkVersion(Versions.androidMinSdkVersion)
+        targetSdkVersion(Versions.androidTargetSdkVersion)
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility(JavaVersion.VERSION_1_7)
+        targetCompatibility(JavaVersion.VERSION_1_7)
     }
 
 }
 
 dependencies {
-    def cacheDependencies = rootProject.ext.cacheDependencies
-    def cacheTestDependencies = rootProject.ext.cacheTestDependencies
+    implementation(project(":data"))
 
-    implementation project(':data')
+    implementation(CacheDependencies.kotlin)
+    implementation(CacheDependencies.rxJava)
+    implementation(CacheDependencies.rxKotlin)
 
-    implementation cacheDependencies.kotlin
-    implementation cacheDependencies.rxJava
-    implementation cacheDependencies.rxKotlin
-
-    testImplementation cacheTestDependencies.junit
-    testImplementation cacheTestDependencies.kotlinJUnit
-    testImplementation cacheTestDependencies.mockito
-    testImplementation cacheTestDependencies.assertj
+    testImplementation(CacheTestDependencies.junit)
+    testImplementation(CacheTestDependencies.kotlinJUnit)
+    testImplementation(CacheTestDependencies.mockito)
+    testImplementation(CacheTestDependencies.assertj)
 }
