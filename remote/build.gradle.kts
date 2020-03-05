@@ -3,16 +3,15 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 dependencies {
     implementation(project(":data"))
 
     implementation(RemoteDependencies.kotlin)
-    implementation(RemoteDependencies.rxJava)
-    implementation(RemoteDependencies.rxKotlin)
+    rx()
     implementation(RemoteDependencies.gson)
     implementation(RemoteDependencies.okHttp)
     implementation(RemoteDependencies.okHttpLogger)
@@ -20,8 +19,5 @@ dependencies {
     implementation(RemoteDependencies.retrofitConverter)
     implementation(RemoteDependencies.retrofitAdapter)
 
-    testImplementation(RemoteTestDependencies.junit)
-    testImplementation(RemoteTestDependencies.kotlinJUnit)
-    testImplementation(RemoteTestDependencies.mockito)
-    testImplementation(RemoteTestDependencies.assertj)
+    unitTesting()
 }

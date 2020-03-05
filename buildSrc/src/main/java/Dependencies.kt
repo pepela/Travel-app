@@ -20,6 +20,7 @@ import VersionsTest.jUnitVersion
 import VersionsTest.mockitoAndroidVersion
 import VersionsTest.mockitoKotlinVersion
 import VersionsTest.runnerVersion
+import org.gradle.api.artifacts.dsl.DependencyHandler
 
 
 object Versions {
@@ -54,17 +55,13 @@ object VersionsTest {
     const val mockitoAndroidVersion = "2.21.0"
 }
 
-object DataDependencies {
+object RxDependencies {
     const val rxJava = "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
     const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${rxKotlinVersion}"
-    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
-object DataTestDependencies {
-    const val junit = "junit:junit:${jUnitVersion}"
-    const val kotlinJUnit = "org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}"
-    const val assertj = "org.assertj:assertj-core:${assertJVersion}"
-    const val mockito = "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
+object DataDependencies {
+    const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 object AppDependencies {
@@ -105,21 +102,12 @@ object AppTestDependencies {
 
 object RemoteDependencies {
     const val gson = "com.google.code.gson:gson:${gsonVersion}"
-    const val rxJava = "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
-    const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${rxKotlinVersion}"
     const val kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}"
     const val okHttp = "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     const val okHttpLogger = "com.squareup.okhttp3:logging-interceptor:${okHttpVersion}"
     const val retrofit = "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     const val retrofitConverter = "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     const val retrofitAdapter = "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
-}
-
-object RemoteTestDependencies {
-    const val junit = "junit:junit:${jUnitVersion}"
-    const val kotlinJUnit = "org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}"
-    const val assertj = "org.assertj:assertj-core:${assertJVersion}"
-    const val mockito = "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
 }
 
 object CacheDependencies {
@@ -133,4 +121,32 @@ object CacheTestDependencies {
     const val kotlinJUnit = "org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}"
     const val assertj = "org.assertj:assertj-core:${assertJVersion}"
     const val mockito = "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
+}
+
+fun DependencyHandler.unitTesting() {
+    implementation("junit:junit:${jUnitVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}")
+    implementation("org.assertj:assertj-core:${assertJVersion}")
+    implementation("com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}")
+}
+
+fun DependencyHandler.rx() {
+    implementation(RxDependencies.rxJava)
+    implementation(RxDependencies.rxKotlin)
+}
+
+private fun DependencyHandler.implementation(depName: String) {
+    add("implementation", depName)
+}
+
+private fun DependencyHandler.kapt(depName: String) {
+    add("kapt", depName)
+}
+
+private fun DependencyHandler.compileOnly(depName: String) {
+    add("compileOnly", depName)
+}
+
+private fun DependencyHandler.api(depName: String) {
+    add("api", depName)
 }
