@@ -1,25 +1,25 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
+}
 
 android {
-    def globalConfiguration = rootProject.extensions.getByName("ext")
-
-    compileSdkVersion globalConfiguration["androidCompileSdkVersion"]
+    compileSdkVersion = 28
     defaultConfig {
-        applicationId "com.peranidze.travel"
-        minSdkVersion globalConfiguration["androidMinSdkVersion"]
-        targetSdkVersion globalConfiguration["androidTargetSdkVersion"]
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId = "com.peranidze.travel"
+        minSdkVersion(Versions.androidMinSdkVersion)
+        targetSdkVersion(Versions.androidTargetSdkVersion)
+        versionCode = 1
+        versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     testOptions {
@@ -30,60 +30,55 @@ android {
 }
 
 dependencies {
-    def appDependencies = rootProject.ext.appDependencies
-    def appTestDependencies = rootProject.ext.appTestDependencies
+    implementation(project(":data"))
+    implementation(project(":remote"))
+    implementation(project(":cache"))
 
-    implementation project(':data')
-    implementation project(':remote')
-    implementation project(':cache')
+    implementation(AppDependencies.androidxCore)
+    implementation(AppDependencies.koin)
+    implementation(AppDependencies.koinScope)
+    implementation(AppDependencies.koinArch)
+    implementation(AppDependencies.rxKotlin)
+    implementation(AppDependencies.rxAndroid)
+    implementation(AppDependencies.kotlin)
+    implementation(AppDependencies.androidAnnotations)
+    implementation(AppDependencies.appCompat)
+    implementation(AppDependencies.recyclerView)
+    implementation(AppDependencies.constraintLayout)
+    implementation(AppDependencies.material)
+    implementation(AppDependencies.archExtensions)
+    implementation(AppDependencies.ankoCommons)
+    implementation(AppDependencies.navigation)
+    implementation(AppDependencies.navigationUi)
+    implementation(AppDependencies.glide)
+    implementation(AppDependencies.okHttp)
 
-    implementation appDependencies.androidxCore
-    implementation appDependencies.koin
-    implementation appDependencies.koinScope
-    implementation appDependencies.koinArch
-    implementation appDependencies.rxKotlin
-    implementation appDependencies.rxAndroid
-    implementation appDependencies.kotlin
-    implementation appDependencies.androidAnnotations
-    implementation appDependencies.appCompat
-    implementation appDependencies.recyclerView
-    implementation appDependencies.constraintLayout
-    implementation appDependencies.material
-    implementation appDependencies.archExtensions
-    implementation appDependencies.ankoCommons
-    implementation appDependencies.navigation
-    implementation appDependencies.navigationUi
-    implementation appDependencies.glide
-    implementation appDependencies.okHttp
+    kapt(AppDependencies.glideCompiler)
 
-    kapt appDependencies.glideCompiler
+    testImplementation(AppTestDependencies.junit)
+    testImplementation(AppTestDependencies.koin)
 
-    testImplementation appTestDependencies.junit
-    testImplementation appTestDependencies.koin
-
-    androidTestImplementation(appTestDependencies.koin, {
-        exclude group: 'org.jetbrains.kotlin'
-        exclude group: 'org.mockito'
+    androidTestImplementation(AppTestDependencies.koin, {
+        exclude group: "org.jetbrains.kotlin"
+        exclude group: "org.mockito"
     })
-    androidTestImplementation(appTestDependencies.androidRunner) {
-        exclude group: 'com.android.support', module: 'support-annotations'
+    androidTestImplementation(AppTestDependencies.androidRunner) {
+        exclude group: "com.android.support", module: "support-annotations"
     }
-    androidTestImplementation(appTestDependencies.espressoCore) {
-        exclude group: 'com.android.support', module: 'support-annotations'
+    androidTestImplementation(AppTestDependencies.espressoCore) {
+        exclude group: "com.android.support", module: "support-annotations"
     }
-    androidTestImplementation appTestDependencies.androidJunit
-    androidTestImplementation appTestDependencies.rules
-    androidTestImplementation appTestDependencies.archTesting
-    androidTestImplementation appTestDependencies.mockitoAndroid
-    androidTestImplementation appTestDependencies.junit
+    androidTestImplementation(AppTestDependencies.androidJunit)
+    androidTestImplementation(AppTestDependencies.rules)
+    androidTestImplementation(AppTestDependencies.archTesting)
+    androidTestImplementation(AppTestDependencies.mockitoAndroid)
+    androidTestImplementation(AppTestDependencies.junit)
 
-    testImplementation appTestDependencies.mockito
-    testImplementation appTestDependencies.kotlinJUnit
+    testImplementation(AppTestDependencies.mockito)
+    testImplementation(AppTestDependencies.kotlinJUnit)
 
-    androidTestImplementation(appTestDependencies.mockito, {
-        exclude group: 'org.jetbrains.kotlin'
-        exclude group: 'org.mockito'
+    androidTestImplementation(AppTestDependencies.mockito, {
+        exclude group: "org.jetbrains.kotlin"
+        exclude group: "org.mockito"
     })
-
-
 }
